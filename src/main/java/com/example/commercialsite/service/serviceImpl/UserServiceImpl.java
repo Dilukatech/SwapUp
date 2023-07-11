@@ -28,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void registerUser(String userName, String password, String firstName, String lastName, String phoneNumber, String address) {
+        if(!userRepo.existsByUserNameEquals(userName)){
         // Create a new User entity
         User user = new User();
         user.setUserName(userName);
@@ -47,6 +48,9 @@ public class UserServiceImpl implements UserService {
 
         // Save the Customer entity
         customerRepo.save(customer);
+        }else {
+            throw new RuntimeException("this user name already exist");
+        }
 
     }
 }
