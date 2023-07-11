@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @EnableJpaRepositories
 public interface UserRepo extends JpaRepository<User,Integer> {
+    boolean existsByUserNameEquals(String userName);
 }
