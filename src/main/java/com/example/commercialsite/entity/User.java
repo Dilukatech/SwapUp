@@ -8,16 +8,25 @@ import org.springframework.boot.autoconfigure.web.WebProperties;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "USERS")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private int userID;
 
-    private String userGmail;
-    private String password;
+    @Column(nullable = false)
+    private String userName;
+
+    @Column(nullable = false)
+    private String userPassword;
+
+    private String firsName;
+    private String lastName;
+
+    private String role;
 
 }
+

@@ -1,22 +1,32 @@
 package com.example.commercialsite.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import com.example.commercialsite.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/v1/user")
-@CrossOrigin
 public class UserController {
-    @GetMapping("/user-account")
-    public String GetDetails(){
+    @Autowired
+    private UserService userService;
 
-        return "get details";
-    }
-    @GetMapping("/test")
-    public String testDetails(){
 
-        return "test details";
+    @PostMapping(path = "/register" ,
+            params = {"userName","password","firstName","lastName","telephoneNumber","address"}
+
+    )
+
+    public String registerUser( String userName,
+                                String password,
+                                String firstName,
+                                String lastName,
+                                String telephoneNumber,
+                                String address) {
+
+        userService.registerUser(userName, password,firstName,lastName,telephoneNumber, address);
+        return "redirect:/login";
     }
+
 }
