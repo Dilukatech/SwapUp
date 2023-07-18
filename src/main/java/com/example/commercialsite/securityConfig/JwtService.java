@@ -26,12 +26,12 @@ public class JwtService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByUserName(username)
+        User user = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getUserName())
-                .password(user.getUserPassword())
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
                 .roles(user.getRole())
                 .build();
     }
@@ -45,7 +45,7 @@ public class JwtService implements UserDetailsService {
 
         UserDetails userDetails = loadUserByUsername(userName);
         String newGeneratedToken = jwtUtil.generateToken(userDetails);
-        User user = userRepo.findByUserName(userName).get();
+        User user = userRepo.findByEmail(userName).get();
 
         LoginResponse loginResponse  = new LoginResponse(
                 user,

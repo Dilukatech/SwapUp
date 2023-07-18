@@ -14,13 +14,11 @@ import javax.persistence.*;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int customerId;
-
-    private String phoneNo;
-    private String address;
+    @Column(name = "token_id")
+    private Long tokenId;
 
     @OneToOne
-    @JoinColumn(name = "userID")
+    @JoinColumn(name = "user_ID")
     private User user;
 
 
