@@ -15,18 +15,37 @@ import javax.persistence.*;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userID;
+    @Column(name = "user_id")
+    private Long userId;
 
-    @Column(nullable = false)
-    private String userName;
+    @Column(name = "email",nullable = false)
+    private String email;
 
-    @Column(nullable = false)
-    private String userPassword;
+    @Column(name = "password",nullable = false)
+    private String password;
 
+    @Column(name = "first_name",length = 100)
     private String firsName;
+
+    @Column(name = "last_name",length = 100)
     private String lastName;
 
-    private String role;
+    @Column(name = "nic",length = 13)
+    private String nic;
 
+    @Column(name = "telephone_number")
+    private String telephone;
+
+    @Column(name = "profile_picture")
+    private String prifilePicture;
+
+    @Column(name = "address")
+    private String address;
+
+    @Column(name = "status")
+    private boolean status;
+
+    @Column(name="role")
+    private String role;
 }
 

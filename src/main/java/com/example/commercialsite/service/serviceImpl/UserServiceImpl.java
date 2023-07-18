@@ -1,10 +1,12 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.CustomerRegisterRequest;
 import com.example.commercialsite.entity.Customer;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.CustomerRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,36 +23,23 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private ModelMapper modelMapper;
+
     public String getEncodedPassword(String passWord){
         return passwordEncoder.encode(passWord);
     }
 
-
     @Override
-    public void registerUser(String userName, String password, String firstName, String lastName, String phoneNumber, String address) {
-        if(!userRepo.existsByUserNameEquals(userName)){
-        // Create a new User entity
-        User user = new User();
-        user.setUserName(userName);
-        user.setUserPassword(getEncodedPassword(password));
-        user.setFirsName(firstName);
-        user.setLastName(lastName);
-        user.setRole("CUSTOMER");
-
-        // Save the User entity
-        User savedUser = userRepo.save(user);
-
-        // Create a new Customer entity
-        Customer customer = new Customer();
-        customer.setPhoneNo(phoneNumber);
-        customer.setAddress(address);
-        customer.setUser(savedUser);
-
-        // Save the Customer entity
-        customerRepo.save(customer);
+    public String registerCustomer(CustomerRegisterRequest customerRegisterRequest) {
+        if(!userRepo.existsByEmailEquals(customerRegisterRequest.getEmail())){
+            User user = modelMapper.map(customerRegisterRequest,User.class);
+            user.setPassword(getEncodedPassword(customerRegisterRequest.getPassword()));
+            user.setRole("CUSTOMER");
+            User savedUser = userRepo.save(user);
+            return "saved";
         }else {
-            throw new RuntimeException("this user name already exist");
+            return "this user name already exist";
         }
-
     }
 }

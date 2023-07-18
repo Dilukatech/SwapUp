@@ -1,11 +1,14 @@
 package com.example.commercialsite.controller;
 
 
+import com.example.commercialsite.dto.CustomerRegisterRequest;
 import com.example.commercialsite.dto.LoginRequest;
 import com.example.commercialsite.dto.LoginResponse;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -19,16 +22,17 @@ public class UserController {
     private JwtService jwtService;
 
 
-    @PostMapping(path = "/register" ,
-            params = {"userName","password","firstName","lastName","telephoneNumber","address"})
-    public String registerUser( String userName, String password, String firstName, String lastName, String telephoneNumber, String address) {
-        userService.registerUser(userName, password,firstName,lastName,telephoneNumber, address);
-        return "redirect:/login";
+    @PostMapping(path = "/register")
+    public ResponseEntity<String> registerUser(@RequestBody CustomerRegisterRequest customerRegisterRequest)throws Exception{
+//        String massage = userService.registerCustomer(customerRegisterRequest);
+        return new ResponseEntity<>(userService.registerCustomer(customerRegisterRequest), HttpStatus.CREATED);
     }
 
+
     @PostMapping({"/login"})
-    public LoginResponse createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception{
-        return jwtService.createJwtToken(loginRequest);
+    public ResponseEntity<LoginResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception{
+        return new ResponseEntity<>(jwtService.createJwtToken(loginRequest),HttpStatus.OK);
     }
+
 
 }
