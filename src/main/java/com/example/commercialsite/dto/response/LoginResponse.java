@@ -1,4 +1,4 @@
-package com.example.commercialsite.dto;
+package com.example.commercialsite.dto.response;
 
 import com.example.commercialsite.entity.User;
 import lombok.AllArgsConstructor;

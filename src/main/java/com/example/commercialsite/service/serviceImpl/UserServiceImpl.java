@@ -1,6 +1,6 @@
 package com.example.commercialsite.service.serviceImpl;
 
-import com.example.commercialsite.dto.UserRegisterRequest;
+import com.example.commercialsite.dto.request.UserRegisterRequest;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.CustomerRepo;
 import com.example.commercialsite.repository.UserRepo;

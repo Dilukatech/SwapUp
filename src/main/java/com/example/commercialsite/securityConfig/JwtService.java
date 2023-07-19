@@ -1,7 +1,7 @@
 package com.example.commercialsite.securityConfig;
 
-import com.example.commercialsite.dto.LoginRequest;
-import com.example.commercialsite.dto.LoginResponse;
+import com.example.commercialsite.dto.request.LoginRequest;
+import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
