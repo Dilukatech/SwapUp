@@ -1,4 +1,4 @@
-package com.example.commercialsite.dto;
+package com.example.commercialsite.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
