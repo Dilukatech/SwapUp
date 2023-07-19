@@ -1,9 +1,9 @@
 package com.example.commercialsite.controller;
 
 
-import com.example.commercialsite.dto.CustomerRegisterRequest;
 import com.example.commercialsite.dto.LoginRequest;
 import com.example.commercialsite.dto.LoginResponse;
+import com.example.commercialsite.dto.UserRegisterRequest;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +22,14 @@ public class UserController {
     private JwtService jwtService;
 
 
-    @PostMapping(path = "/register")
-    public ResponseEntity<String> registerUser(@RequestBody CustomerRegisterRequest customerRegisterRequest)throws Exception{
-//        String massage = userService.registerCustomer(customerRegisterRequest);
-        return new ResponseEntity<>(userService.registerCustomer(customerRegisterRequest), HttpStatus.CREATED);
+    @PostMapping(path = "/register-customer")
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
+        return new ResponseEntity<>(userService.registerUser(userRegisterRequest), HttpStatus.CREATED);
+    }
+
+    @PostMapping(path = "/register-staff")
+    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
+        return new ResponseEntity<>(userService.registerUser(userRegisterRequest), HttpStatus.CREATED);
     }
 
 
