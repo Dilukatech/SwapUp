@@ -9,11 +9,14 @@ import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/v1/user")
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class UserController {
     @Autowired
     private UserService userService;
@@ -28,6 +31,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/register-staff")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
         return new ResponseEntity<>(userService.registerUser(userRegisterRequest), HttpStatus.CREATED);
     }

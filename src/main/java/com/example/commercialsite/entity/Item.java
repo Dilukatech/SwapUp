@@ -36,7 +36,7 @@ public class Item {
     @Column(name = "profile_picture")
     private String profilePicture;
 
-    @Column(name = "active_status", columnDefinition = "TINYINT")
+    @Column(name = "active_status")
     private boolean activeState;
 
 }
