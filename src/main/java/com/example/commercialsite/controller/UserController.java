@@ -23,7 +23,7 @@ public class UserController {
 
     @Autowired
     private JwtService jwtService;
-/////////////////
+
 
     @PostMapping(path = "/register-customer")
     public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
