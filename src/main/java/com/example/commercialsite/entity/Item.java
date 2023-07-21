@@ -6,11 +6,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name = "Item")
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+
+@Entity
+@Table(name = "Item")
 public class Item {
 
     @Id
@@ -30,13 +32,16 @@ public class Item {
     @Column(name = "quality_status",nullable = false)
     private String qualityStatus;
 
-    @Column(name = "size",nullable = false)
-    private String size;
+    @Column(name = "type",nullable = false)
+    private String type;
 
-    @Column(name = "profile_picture")
-    private String profilePicture;
+    @Column(name = "price_range")
+    private String priceRange;
 
     @Column(name = "active_status")
     private boolean activeState;
+
+    @Column(name = "size", nullable = false)
+    private String size;
 
 }
