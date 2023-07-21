@@ -5,6 +5,7 @@ import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.service.ItemService;
 import com.example.commercialsite.utill.ItemMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,15 +13,24 @@ import org.springframework.stereotype.Service;
 public class ItemServiceIMPL implements ItemService {
 
     @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
     private ItemRepo itemRepo;
 
     @Autowired
     private ItemMapper itemMapper;
 
-
     @Override
-    public void saveItem(ItemSaveRequestDTO itemSaveRequestDTO) {
-        Item item = itemMapper.dtoToEntity(itemSaveRequestDTO);
-        itemRepo.save(item);
+    public boolean saveItem(ItemSaveRequestDTO itemSaveRequestDTO) {
+        try {
+            // Save the item entity in the database
+            Item item = modelMapper.map(itemSaveRequestDTO, Item.class);
+            return true; // Item saved successfully
+        }catch(Exception e) {
+            // Handle any exceptions that occurred during the save operation
+            e.printStackTrace();
+            return false; // Failed to save the item
+        }
     }
 }
