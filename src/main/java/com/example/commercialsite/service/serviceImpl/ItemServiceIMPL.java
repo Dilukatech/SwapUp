@@ -26,6 +26,7 @@ public class ItemServiceIMPL implements ItemService {
         try {
             // Save the item entity in the database
             Item item = modelMapper.map(itemSaveRequestDTO, Item.class);
+            itemRepo.save(item);
             return true; // Item saved successfully
         }catch(Exception e) {
             // Handle any exceptions that occurred during the save operation
