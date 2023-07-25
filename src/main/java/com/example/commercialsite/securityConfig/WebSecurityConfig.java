@@ -34,8 +34,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-                .authorizeRequests().antMatchers("api/v1/favorites/{userId}","api/v1/favorites/{userId}/items/{itemId}","/api/v1/favorites/add-favorites","/api/v1/item/save-item","/api/v1/user/register-customer","/api/v1/user/login").permitAll()
-                .antMatchers(HttpHeaders.ALLOW).permitAll()
+                .authorizeRequests()
+                .antMatchers("/api/v1/favorites/{userId}").permitAll()
+                .antMatchers("/api/v1/favorites/{userId}/items/{itemId}").permitAll()
+                .antMatchers("/api/v1/favorites/add-favorites").permitAll()
+                .antMatchers("/api/v1/item/save-item").permitAll()
+                .antMatchers("/api/v1/user/register-customer").permitAll()
+                .antMatchers("/api/v1/user/login").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
