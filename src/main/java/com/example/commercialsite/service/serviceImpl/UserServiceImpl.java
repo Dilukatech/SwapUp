@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -108,5 +109,10 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>("Account Verified", HttpStatus.OK);
 
         }
+    }
+
+    @Override
+    public Optional<User> getUserById(Long userId) {
+        return userRepo.findById(userId);
     }
 }
