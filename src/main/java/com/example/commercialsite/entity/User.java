@@ -42,10 +42,14 @@ public class User {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "status")
-    private boolean status;
-
     @Column(name="role")
     private String role;
+
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "verification_code", length = 64)
+    private String verificationCode;
+
 }
 

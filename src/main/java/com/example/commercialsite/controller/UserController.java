@@ -42,5 +42,10 @@ public class UserController {
         return new ResponseEntity<>(jwtService.createJwtToken(loginRequest),HttpStatus.OK);
     }
 
+    @GetMapping(path = "/verification",params = "code")
+    public ResponseEntity<?> verifyCustomer(@RequestParam(value = "code")String code)throws Exception{
+        return userService.verifyCustomer(code);
+    }
+
 
 }

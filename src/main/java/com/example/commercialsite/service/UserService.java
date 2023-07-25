@@ -1,13 +1,13 @@
 package com.example.commercialsite.service;
 
 import com.example.commercialsite.dto.request.UserRegisterRequest;
-import com.example.commercialsite.entity.User;
+import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
+import javax.mail.MessagingException;
+import java.io.UnsupportedEncodingException;
 
 public interface UserService {
 
-    String registerUser(UserRegisterRequest userRegisterRequest);
-
-    Optional<User> getUserById(Long userId);
+    String registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException;
+    ResponseEntity<?> verifyCustomer(String code);
 }
