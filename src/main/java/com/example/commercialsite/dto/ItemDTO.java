@@ -1,4 +1,4 @@
-package com.example.commercialsite.dto.request;
+package com.example.commercialsite.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,9 @@ import javax.persistence.Column;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class ItemSaveRequestDTO {
+public class ItemDTO {
 
+    private Long itemId;
     private String color;
     private String imageURL;
     private String gender;
@@ -19,5 +20,4 @@ public class ItemSaveRequestDTO {
     private String priceRange;
     private boolean activeState;
     private String size;
-
 }
