@@ -5,10 +5,19 @@ import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.CustomerRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -24,19 +33,28 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private JavaMailSender mailSender;
+
     public String getEncodedPassword(String passWord){
         return passwordEncoder.encode(passWord);
     }
 
     @Override
-    public String registerUser(UserRegisterRequest userRegisterRequest) {
+    public String registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
         if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
             if (userRegisterRequest.getRole() == null || userRegisterRequest.getRole() == "") {
                 User user = modelMapper.map(userRegisterRequest, User.class);
                 user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
                 user.setRole("CUSTOMER");
+
+                String randomCode = RandomString.make(64);
+                user.setVerificationCode(randomCode);
+
                 userRepo.save(user);
-                return "saved customer";
+                String siteURL="http://localhost:3000";
+                sendVerificationEmail( user, siteURL);
+                return "please check your mail for verify your account";
             } else {
                 User user = modelMapper.map(userRegisterRequest, User.class);
                 user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
@@ -48,4 +66,49 @@ public class UserServiceImpl implements UserService {
         }
 
     }
+
+    private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = user.getEmail();
+        String fromAddress = "swapup41@gmail.com";
+        String senderName = "SwapUp";
+        String subject = "Please verify your request";
+        String content = "Dear [[name]],<br>"
+                + "Please click the link below to verify your request:<br>"
+                + "<h3><a href=\"[[URL]]\" target=\"_self\">VERIFY</a></h3>"
+                + "Thank you,<br>"
+                + "Your company name.";
+
+        MimeMessage message = mailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(message);
+
+        helper.setFrom(fromAddress, senderName);
+        helper.setTo(toAddress);
+        helper.setSubject(subject);
+
+        content = content.replace("[[name]]", user.getFirstName()+" "+user.getLastName());
+        String verifyURL = siteURL + "/verify?code=" + user.getVerificationCode();
+
+        content = content.replace("[[URL]]", verifyURL);
+
+        helper.setText(content, true);
+
+        mailSender.send(message);
+
+    }
+
+    @Override
+    public ResponseEntity<?> verifyCustomer(String code) {
+        User user = userRepo.findByVerificationCodeEquals(code);
+        if (user == null || user.isEnabled()) {
+            return new ResponseEntity<>("InValid Request", HttpStatus.BAD_REQUEST);
+        } else {
+            user.setVerificationCode(null);
+            user.setEnabled(true);
+            userRepo.save(user);
+            return new ResponseEntity<>("Account Verified", HttpStatus.OK);
+
+        }
+    }
+
+
 }
