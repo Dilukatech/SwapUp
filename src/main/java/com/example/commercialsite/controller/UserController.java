@@ -26,20 +26,21 @@ public class UserController {
 
 
     @PostMapping(path = "/register-customer")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
-        return new ResponseEntity<>(userService.registerUser(userRegisterRequest), HttpStatus.CREATED);
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
+//        userService.sendVerificationEmail(userRegisterRequest);
+        return userService.registerUser(userRegisterRequest);
     }
 
     @PostMapping(path = "/register-staff")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest)throws Exception{
-        return new ResponseEntity<>(userService.registerUser(userRegisterRequest), HttpStatus.CREATED);
+    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
+        return userService.registerUser(userRegisterRequest);
     }
 
 
     @PostMapping({"/login"})
-    public ResponseEntity<LoginResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception{
-        return new ResponseEntity<>(jwtService.createJwtToken(loginRequest),HttpStatus.OK);
+    public ResponseEntity<String> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+        return jwtService.createJwtToken(loginRequest);
     }
 
     @GetMapping(path = "/verification",params = "code")
