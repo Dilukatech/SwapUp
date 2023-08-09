@@ -10,8 +10,11 @@ import java.util.Optional;
 
 public interface UserService {
 
-    String registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException;
-    ResponseEntity<?> verifyCustomer(String code);
+    ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException;
+    ResponseEntity<?>  verifyCustomer(String code);
 
     Optional<User> getUserById(Long userId);
+
+
+
 }
