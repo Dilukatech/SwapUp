@@ -2,6 +2,7 @@ package com.example.commercialsite.controller;
 
 
 import com.example.commercialsite.dto.request.LoginRequest;
+import com.example.commercialsite.dto.response.AuthResponse;
 import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.dto.request.UserRegisterRequest;
 import com.example.commercialsite.securityConfig.JwtService;
@@ -38,8 +39,13 @@ public class UserController {
     }
 
 
+//    @PostMapping({"/login"})
+//    public ResponseEntity<String> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+//        return jwtService.createJwtToken(loginRequest);
+//    }
+
     @PostMapping({"/login"})
-    public ResponseEntity<String> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<AuthResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
         return jwtService.createJwtToken(loginRequest);
     }
 

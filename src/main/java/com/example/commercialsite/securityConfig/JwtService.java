@@ -1,6 +1,7 @@
 package com.example.commercialsite.securityConfig;
 
 import com.example.commercialsite.dto.request.LoginRequest;
+import com.example.commercialsite.dto.response.AuthResponse;
 import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.UserRepo;
@@ -39,22 +40,33 @@ public class JwtService implements UserDetailsService {
     }
 
 
-    public ResponseEntity<String> createJwtToken(LoginRequest loginRequest) throws Exception{
+    public ResponseEntity<AuthResponse> createJwtToken(LoginRequest loginRequest) throws Exception {
         String userName = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
-
-        User user = userRepo.findByEmail(userName).get();
-        if(!user.isEnabled()){
-            return new ResponseEntity<>("your account not verified", HttpStatus.UNAUTHORIZED);
-        }else{
-
+        User user = userRepo.findByEmail(userName).orElse(null);
+        if (user == null || !user.isEnabled()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } else {
             authenticate(userName, userPassword);
 
             UserDetails userDetails = loadUserByUsername(userName);
             String newGeneratedToken = jwtUtil.generateToken(userDetails);
-            return new ResponseEntity<>("login success. " +"  token : " +newGeneratedToken, HttpStatus.OK);
 
+            AuthResponse authResponse = new AuthResponse(
+                    user.getUserId(),
+                    user.getEmail(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getNic(),
+                    user.getTelephone(),
+                    user.getProfilePicture(),
+                    user.getAddress(),
+                    user.getRole(),
+                    newGeneratedToken
+            );
+
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
     }
 
