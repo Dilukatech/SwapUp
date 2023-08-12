@@ -9,6 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ItemServiceIMPL implements ItemService {
 
@@ -33,5 +35,10 @@ public class ItemServiceIMPL implements ItemService {
             e.printStackTrace();
             return false; // Failed to save the item
         }
+    }
+
+    @Override
+    public List<Item> getAllItems() {
+        return itemRepo.findAll(); // Fetch all items from the database
     }
 }
