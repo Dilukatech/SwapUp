@@ -5,6 +5,8 @@ import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,33 +39,35 @@ public class JwtService implements UserDetailsService {
     }
 
 
-    public LoginResponse createJwtToken(LoginRequest loginRequest) throws Exception{
+    public ResponseEntity<String> createJwtToken(LoginRequest loginRequest) throws Exception{
         String userName = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
-        authenticate(userName , userPassword);
 
-        UserDetails userDetails = loadUserByUsername(userName);
-        String newGeneratedToken = jwtUtil.generateToken(userDetails);
         User user = userRepo.findByEmail(userName).get();
+        if(!user.isEnabled()){
+            return new ResponseEntity<>("your account not verified", HttpStatus.UNAUTHORIZED);
+        }else{
 
-        LoginResponse loginResponse  = new LoginResponse(
-                user,
-                newGeneratedToken
-        );
-        return loginResponse;
-    }
+            authenticate(userName, userPassword);
 
+            UserDetails userDetails = loadUserByUsername(userName);
+            String newGeneratedToken = jwtUtil.generateToken(userDetails);
+            return new ResponseEntity<>("login success. " +"  token : " +newGeneratedToken, HttpStatus.OK);
 
-
-    private void authenticate(String userName,String userPassword) throws Exception{
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,userPassword));
-        }catch (BadCredentialsException e){
-            throw new Exception("invalid credentials",e);
         }
     }
 
 
-}
+        private void authenticate(String userName,String userPassword) throws Exception{
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,userPassword));
+            }catch (BadCredentialsException e){
+                throw new Exception("invalid credentials",e);
+            }
+        }
+    }
+
+
+
 

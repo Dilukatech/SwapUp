@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
         if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
-            if (userRegisterRequest.getRole() == null || userRegisterRequest.getRole() == "") {
+            if (userRegisterRequest.getRole() == null || userRegisterRequest.getRole() == ""||userRegisterRequest.getRole() =="CUSTOMER") {
                 User user = modelMapper.map(userRegisterRequest, User.class);
                 user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
                 user.setRole("CUSTOMER");
@@ -55,15 +55,16 @@ public class UserServiceImpl implements UserService {
                 userRepo.save(user);
                 String siteURL="http://localhost:3000";
                 sendVerificationEmail( user, siteURL);
-                return "please check your mail for verify your account";
+                return new ResponseEntity<>("please check your mail for verify your account",HttpStatus.OK);
             } else {
                 User user = modelMapper.map(userRegisterRequest, User.class);
                 user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
+                user.setEnabled(true);
                 userRepo.save(user);
-                return "saved " + user.getRole();
+                return new ResponseEntity<>("saved " + user.getRole(),HttpStatus.OK);
             }
         }else{
-            return "this user name already exist";
+            return new ResponseEntity<>("this user name already exist",HttpStatus.CONFLICT);
         }
 
     }
@@ -98,15 +99,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?> verifyCustomer(String code) {
-        User user = userRepo.findByVerificationCodeEquals(code);
-        if (user == null || user.isEnabled()) {
-            return new ResponseEntity<>("InValid Request", HttpStatus.BAD_REQUEST);
-        } else {
+    public ResponseEntity<?>  verifyCustomer(String code) {
+        User user=userRepo.findByVerificationCodeEquals(code);
+        if(user == null || user.isEnabled()){
+            return new ResponseEntity<>("InValid Request",HttpStatus.BAD_REQUEST);
+        }else{
             user.setVerificationCode(null);
             user.setEnabled(true);
             userRepo.save(user);
-            return new ResponseEntity<>("Account Verified", HttpStatus.OK);
+            return new ResponseEntity<>("Account Verified",HttpStatus.OK);
 
         }
     }
