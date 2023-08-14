@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/register-staff")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
         return userService.registerUser(userRegisterRequest);
     }
