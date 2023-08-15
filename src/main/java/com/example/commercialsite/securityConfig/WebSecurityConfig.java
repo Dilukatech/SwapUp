@@ -39,7 +39,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .authorizeRequests().antMatchers("api/v1/favorites/{userId}","api/v1/favorites/{userId}/items/{itemId}","/api/v1/favorites/add-favorites",
                         "/api/v1/item/save-item","/api/v1/item/get-items","/api/v1/user/register-customer","/api/v1/user/login",
-                        "/api/v1/user/verification/**","/api/v1/user/register-staff").permitAll()
+                        "/api/v1/user/verification/**","/api/v1/user/register-staff","/api/v1/admin/{**}/on-hold","/api/v1/admin/{**}/remove-hold",
+                        "/api/v1/admin/get-all-users").permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
