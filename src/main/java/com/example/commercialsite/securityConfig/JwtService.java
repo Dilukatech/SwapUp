@@ -2,7 +2,6 @@ package com.example.commercialsite.securityConfig;
 
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.entity.User;
 import com.example.commercialsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class JwtService implements UserDetailsService {
         String userPassword = loginRequest.getUserPassword();
 
         User user = userRepo.findByEmail(userName).orElse(null);
-        if (user == null || !user.isEnabled()) {
+        if (user == null || !user.isActiveStatus()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             authenticate(userName, userPassword);

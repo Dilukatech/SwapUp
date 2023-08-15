@@ -3,7 +3,6 @@ package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.dto.response.LoginResponse;
 import com.example.commercialsite.dto.request.UserRegisterRequest;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
@@ -37,12 +36,6 @@ public class UserController {
     public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
         return userService.registerUser(userRegisterRequest);
     }
-
-
-//    @PostMapping({"/login"})
-//    public ResponseEntity<String> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
-//        return jwtService.createJwtToken(loginRequest);
-//    }
 
     @PostMapping({"/login"})
     public ResponseEntity<AuthResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {

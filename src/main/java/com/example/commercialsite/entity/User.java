@@ -45,11 +45,14 @@ public class User {
     @Column(name="role")
     private String role;
 
-    @Column(name = "enabled")
-    private boolean enabled;
+    @Column(name = "activeStatus")
+    private boolean activeStatus;
 
     @Column(name = "verification_code", length = 64)
     private String verificationCode;
+
+    @Column(name = "verified")
+    private boolean verified;
 
 }
 
