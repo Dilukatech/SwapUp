@@ -7,6 +7,7 @@ import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.service.QualityCheckerService;
+import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
     @Autowired
     private ItemRepo itemRepo;
 
-    public ResponseEntity<String> AcceptRequestToken(AcceptRequestDto acceptRequestDto) {
+    public ResponseEntity<StandardResponse> AcceptRequestToken(AcceptRequestDto acceptRequestDto) {
         try {
 
              if(requestTokenRepo.existsById(acceptRequestDto.getRequestTokenId())){
@@ -44,19 +45,25 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                  requestTokenRepo.save(requestToken);
                  itemRepo.save(item);
 
-                 return new ResponseEntity<>("Data saved successfully.", HttpStatus.OK);
+                 return new ResponseEntity<StandardResponse>(
+                         new StandardResponse(201,"Data saved successfully.", null),
+                         HttpStatus.CREATED);
               }else{
-                 return new ResponseEntity<>("Request Token Id Not Found",HttpStatus.NOT_FOUND);
+                 return new ResponseEntity<StandardResponse>(
+                         new StandardResponse(400,"Request Id Not Found",null ),
+                         HttpStatus.BAD_REQUEST);
              }
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>("Error while processing the Accept Request Token: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(), null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
 
     @Override
-    public ResponseEntity<String> rejectRequestToken(RejectRequestDto rejectRequestDto) {
+    public ResponseEntity<StandardResponse> rejectRequestToken(RejectRequestDto rejectRequestDto) {
        try{
            if(requestTokenRepo.existsById(rejectRequestDto.getRequestTokenId())){
                 RequestToken requestToken = new RequestToken();
@@ -65,14 +72,21 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                 requestToken.setStatus(-1);
 
                 requestTokenRepo.save(requestToken);
-                return new ResponseEntity<>("Rejected Token Request.", HttpStatus.OK);
+
+                return new ResponseEntity<StandardResponse>(
+                       new StandardResponse(201,"Token Request Successfully Rejected.", null),
+                       HttpStatus.CREATED);
              }else {
-                return new ResponseEntity<>("Request Token Id Not Found",HttpStatus.NOT_FOUND);
+                return new ResponseEntity<StandardResponse>(
+                       new StandardResponse(400,"Request Token Id Not Found.", null),
+                       HttpStatus.BAD_REQUEST);
              }
 
        } catch (Exception e) {
         e.printStackTrace();
-        return new ResponseEntity<>("Error while processing the Accept Request Token: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<StandardResponse>(
+                new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(),null),
+           HttpStatus.INTERNAL_SERVER_ERROR);
        }
 
     }
