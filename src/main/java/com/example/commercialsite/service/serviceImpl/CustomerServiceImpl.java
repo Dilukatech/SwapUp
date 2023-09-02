@@ -6,6 +6,7 @@ import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.CustomerService;
+import com.example.commercialsite.utill.StandardResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,30 +24,84 @@ public class CustomerServiceImpl implements CustomerService {
     private RequestTokenRepo requestTokenRepo;
 
     @Override
-    public CustomerRequestTokenResponseDto CreateRequestToken(CustomerRequestTokenDto customerRequestTokenDto) {
-        try{
-            RequestToken requestToken = new RequestToken();
-            requestToken.setCustomerId(customerRequestTokenDto.getCustomerId());
-            requestToken.setItemDescription(customerRequestTokenDto.getItemDescription());
-            requestToken.setItemImage(customerRequestTokenDto.getItemImage());
-            requestToken.setRequestDateTime(LocalDateTime.now());
-            requestToken.setStatus(0);
+    public ResponseEntity<StandardResponse> CreateRequestToken(CustomerRequestTokenDto customerRequestTokenDto) {
+        if (userRepo.existsById(customerRequestTokenDto.getCustomerId())) {
+            if(userRepo.getReferenceById(customerRequestTokenDto.getCustomerId()).isActiveStatus()){
+                if(userRepo.getReferenceById(customerRequestTokenDto.getCustomerId()).isVerified()){
+                    RequestToken requestToken = new RequestToken();
+                    requestToken.setCustomerId(customerRequestTokenDto.getCustomerId());
+                    requestToken.setItemDescription(customerRequestTokenDto.getItemDescription());
+                    requestToken.setItemImage(customerRequestTokenDto.getItemImage());
+                    requestToken.setRequestDateTime(LocalDateTime.now());
+                    requestToken.setStatus(0);
 
-            requestTokenRepo.save(requestToken);
+                    requestTokenRepo.save(requestToken);
 
-            CustomerRequestTokenResponseDto dto = new CustomerRequestTokenResponseDto(
-                    requestToken.getRequestTokenId(),
-                    requestToken.getCustomerId(),
-                    requestToken.getStatus(),
-                    requestToken.getItemDescription(),
-                    requestToken.getItemImage(),
-                    requestToken.getRequestDateTime()
+                    CustomerRequestTokenResponseDto dto = new CustomerRequestTokenResponseDto(
+                            requestToken.getRequestTokenId(),
+                            requestToken.getCustomerId(),
+                            requestToken.getStatus(),
+                            requestToken.getItemDescription(),
+                            requestToken.getItemImage(),
+                            requestToken.getRequestDateTime()
+                    );
+
+                    return new ResponseEntity<StandardResponse>(
+                            new StandardResponse(201,"saved user.",dto),
+                            HttpStatus.CREATED
+                    );
+                }else{
+                    return new ResponseEntity<StandardResponse>(
+                            new StandardResponse(400,"this user is not verified.",new CustomerRequestTokenDto()),
+                            HttpStatus.BAD_REQUEST
+                    );
+                }
+
+            }else{
+                return new ResponseEntity<StandardResponse>(
+                        new StandardResponse(400,"this user is hold",new CustomerRequestTokenDto()),
+                        HttpStatus.BAD_REQUEST
+                );
+            }
+
+        } else {
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(400,"user not found for this user id",new CustomerRequestTokenDto()),
+                    HttpStatus.BAD_REQUEST
             );
-
-            return dto;
-        }catch (Exception e){
-            e.printStackTrace();
-            return new CustomerRequestTokenResponseDto();
         }
     }
+
+//    @Override
+//    public CustomerRequestTokenResponseDto CreateRequestToken(CustomerRequestTokenDto customerRequestTokenDto) {
+//        if(userRepo.existsById(customerRequestTokenDto.getCustomerId())){
+//            try{
+//                RequestToken requestToken = new RequestToken();
+//                requestToken.setCustomerId(customerRequestTokenDto.getCustomerId());
+//                requestToken.setItemDescription(customerRequestTokenDto.getItemDescription());
+//                requestToken.setItemImage(customerRequestTokenDto.getItemImage());
+//                requestToken.setRequestDateTime(LocalDateTime.now());
+//                requestToken.setStatus(0);
+//
+//                requestTokenRepo.save(requestToken);
+//
+//                CustomerRequestTokenResponseDto dto = new CustomerRequestTokenResponseDto(
+//                        requestToken.getRequestTokenId(),
+//                        requestToken.getCustomerId(),
+//                        requestToken.getStatus(),
+//                        requestToken.getItemDescription(),
+//                        requestToken.getItemImage(),
+//                        requestToken.getRequestDateTime()
+//                );
+//
+//                return dto;
+//            }catch (Exception e){
+//                e.printStackTrace();
+//                return new CustomerRequestTokenResponseDto();
+//            }
+//        }else{
+//
+//        }
+//
+//    }
 }

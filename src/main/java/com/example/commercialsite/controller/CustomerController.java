@@ -6,6 +6,7 @@ import com.example.commercialsite.dto.request.CustomerRequestTokenDto;
 import com.example.commercialsite.dto.response.CustomerRequestTokenResponseDto;
 import com.example.commercialsite.service.CustomerService;
 import com.example.commercialsite.service.UserService;
+import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,13 +23,15 @@ public class CustomerController {
 
 
     @PostMapping("/RequestTokenFromCustomer")
-    public ResponseEntity<CustomerRequestTokenResponseDto> RequestTokenFromCustomer(@RequestBody CustomerRequestTokenDto customerRequestTokenDto) {
+    public ResponseEntity<StandardResponse> RequestTokenFromCustomer(@RequestBody CustomerRequestTokenDto customerRequestTokenDto) {
         try {
-            CustomerRequestTokenResponseDto dto = customerService.CreateRequestToken(customerRequestTokenDto);
-            return new ResponseEntity<>(dto, HttpStatus.OK);
+            return customerService.CreateRequestToken(customerRequestTokenDto);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(new CustomerRequestTokenResponseDto(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"internal server error in Request Token From Customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
         }
     }
 }
