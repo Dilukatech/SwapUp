@@ -18,4 +18,8 @@ public interface UserService {
     ResponseEntity<String> holdUser(Long userId);
     ResponseEntity<String>removeHoldFromUser(Long userId);
     ResponseEntity<List<getAllUsersToAdmin>> getAllUsers();
+
+
+
+    User getCustomer(String email);
 }
