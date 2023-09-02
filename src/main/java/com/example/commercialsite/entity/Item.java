@@ -29,7 +29,7 @@ public class Item {
     @Column(name = "gender",nullable = false)
     private String gender;
 
-    @Column(name = "quality_status",nullable = false)
+    @Column(name = "quality_status")
     private String qualityStatus;
 
     @Column(name = "type",nullable = false)
@@ -44,4 +44,19 @@ public class Item {
     @Column(name = "size", nullable = false)
     private String size;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "RequestTokenId", referencedColumnName = "requestTokenId")
+    private RequestToken requestToken;
+
+
+    public Item(String color, String imageURL, String gender, String type, String priceRange, boolean activeState, String size, RequestToken requestToken) {
+        this.color = color;
+        this.imageURL = imageURL;
+        this.gender = gender;
+        this.type = type;
+        this.priceRange = priceRange;
+        this.activeState = activeState;
+        this.size = size;
+        this.requestToken = requestToken;
+    }
 }

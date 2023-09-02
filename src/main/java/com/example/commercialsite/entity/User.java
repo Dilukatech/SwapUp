@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
@@ -53,6 +56,7 @@ public class User {
 
     @Column(name = "verified")
     private boolean verified;
+
 
 }
 

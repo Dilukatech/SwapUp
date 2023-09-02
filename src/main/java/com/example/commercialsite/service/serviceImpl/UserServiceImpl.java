@@ -162,4 +162,15 @@ public class UserServiceImpl implements UserService {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
+    @Override
+    public User getCustomer(String email) {
+        if(userRepo.existsByEmailEquals(email)){
+            User user = userRepo.findByEmailEquals(email);
+            return user;
+        }else{
+            return null;
+        }
+    }
 }
