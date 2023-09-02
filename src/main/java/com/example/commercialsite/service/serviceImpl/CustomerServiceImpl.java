@@ -47,7 +47,7 @@ public class CustomerServiceImpl implements CustomerService {
                     );
 
                     return new ResponseEntity<StandardResponse>(
-                            new StandardResponse(201,"saved user.",dto),
+                            new StandardResponse(201,"saved Request.",dto),
                             HttpStatus.CREATED
                     );
                 }else{
@@ -66,7 +66,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         } else {
             return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(400,"user not found for this user id",new CustomerRequestTokenDto()),
+                    new StandardResponse(400,"user not found for this user id.",new CustomerRequestTokenDto()),
                     HttpStatus.BAD_REQUEST
             );
         }
