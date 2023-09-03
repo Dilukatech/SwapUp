@@ -46,17 +46,17 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                  itemRepo.save(item);
 
                  return new ResponseEntity<StandardResponse>(
-                         new StandardResponse(201,"Data saved successfully.", null),
+                         new StandardResponse(201,"Data saved successfully.", requestToken),
                          HttpStatus.CREATED);
               }else{
                  return new ResponseEntity<StandardResponse>(
-                         new StandardResponse(400,"Request Id Not Found",null ),
+                         new StandardResponse(400,"Request Id Not Found",new RequestToken() ),
                          HttpStatus.BAD_REQUEST);
              }
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(), null),
+                    new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(), new RequestToken()),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
@@ -74,18 +74,18 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                 requestTokenRepo.save(requestToken);
 
                 return new ResponseEntity<StandardResponse>(
-                       new StandardResponse(201,"Token Request Successfully Rejected.", null),
+                       new StandardResponse(201,"Token Request Successfully Rejected.", requestToken),
                        HttpStatus.CREATED);
              }else {
                 return new ResponseEntity<StandardResponse>(
-                       new StandardResponse(400,"Request Token Id Not Found.", null),
+                       new StandardResponse(400,"Request Token Id Not Found.", new RequestToken()),
                        HttpStatus.BAD_REQUEST);
              }
 
        } catch (Exception e) {
         e.printStackTrace();
         return new ResponseEntity<StandardResponse>(
-                new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(),null),
+                new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(),new RequestToken()),
            HttpStatus.INTERNAL_SERVER_ERROR);
        }
 

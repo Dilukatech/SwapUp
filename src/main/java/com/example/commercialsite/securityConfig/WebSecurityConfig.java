@@ -40,8 +40,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("api/v1/favorites/{userId}","api/v1/favorites/{userId}/items/{itemId}","/api/v1/favorites/add-favorites",
                         "/api/v1/item/save-item","/api/v1/item/get-items","/api/v1/user/register-customer","/api/v1/user/login",
                         "/api/v1/user/verification/**","/api/v1/user/register-staff","/api/v1/admin/{**}/on-hold","/api/v1/admin/{**}/remove-hold",
-                        "/api/v1/admin/get-all-users","/api/v1/customer/request-token","/api/v1/customer/saveRequestToken",
-                        "/api/v1/quality-checker/accept-request-token","/api/v1/customer/RequestTokenFromCustomer","/api/v1/quality-checker/reject-request-token").permitAll()
+                        "/api/v1/admin/get-all-users","/api/v1/quality-checker/accept-request-token","/api/v1/customer/RequestTokenFromCustomer",
+                        "/api/v1/quality-checker/reject-request-token").permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()
                 .anyRequest().authenticated()
