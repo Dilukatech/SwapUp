@@ -27,7 +27,6 @@ public class RequestToken {
     private String itemImage;
     private LocalDateTime requestDateTime;
 
-
     @OneToOne(mappedBy = "requestToken", cascade = CascadeType.ALL)
     private Item item;
 
