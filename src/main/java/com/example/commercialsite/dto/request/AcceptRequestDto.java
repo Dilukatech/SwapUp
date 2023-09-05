@@ -1,25 +1,27 @@
 package com.example.commercialsite.dto.request;
 
-import com.example.commercialsite.entity.RequestToken;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import org.w3c.dom.Text;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class AcceptRequestDto {
-
+    // object id
+    private Long requestTokenId;
+    // quality checker id
+    private Long qualityCheckerId;
+    // updated by quality-checker
+    // private boolean activeState; // no need for status tobe passed // it becomes true upon accepting the request
+    // item details
     private String color;
     private String imageURL;
     private String gender;
     private String type;
-    private String priceRange;
-    private boolean activeState;
+    private int price;
     private String size;
-    private Long requestTokenId;
-    private Long qualityCheckerId;
+    private Text description;
 
 }

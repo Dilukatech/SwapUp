@@ -1,7 +1,6 @@
 package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.AcceptRequestDto;
-import com.example.commercialsite.dto.request.CustomerRequestTokenDto;
 import com.example.commercialsite.dto.request.RejectRequestDto;
 import com.example.commercialsite.service.QualityCheckerService;
 import com.example.commercialsite.utill.StandardResponse;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/quality-checker")
-public class QualityChecker {
+public class QualityCheckerController {
     @Autowired
     private QualityCheckerService qualityCheckerService;
 
