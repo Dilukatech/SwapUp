@@ -2,16 +2,14 @@ package com.example.commercialsite.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.web.WebProperties;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
 
-@Entity
-@Table(name = "USERS")
+@Getter
+@Entity(name = "User")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -37,7 +35,7 @@ public class User {
     private String nic;
 
     @Column(name = "telephone_number")
-    private String telephone;
+    private String telephoneNumber;
 
     @Column(name = "profile_picture")
     private String profilePicture;
@@ -48,7 +46,7 @@ public class User {
     @Column(name="role")
     private String role;
 
-    @Column(name = "activeStatus")
+    @Column(name = "active_status")
     private boolean activeStatus;
 
     @Column(name = "verification_code", length = 64)
