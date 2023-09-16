@@ -2,7 +2,7 @@ package com.example.commercialsite.securityConfig;
 
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,13 +28,13 @@ public class JwtService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(username)
+        Users users = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole())
+                .withUsername(users.getEmail())
+                .password(users.getPassword())
+                .roles(users.getRole())
                 .build();
     }
 
@@ -43,8 +43,8 @@ public class JwtService implements UserDetailsService {
         String userName = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
-        User user = userRepo.findByEmail(userName).orElse(null);
-        if (user == null || !user.isActiveStatus()) {
+        Users users = userRepo.findByEmail(userName).orElse(null);
+        if (users == null || !users.isActiveStatus()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
             authenticate(userName, userPassword);
@@ -53,15 +53,15 @@ public class JwtService implements UserDetailsService {
             String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
             AuthResponse authResponse = new AuthResponse(
-                    user.getUserId(),
-                    user.getEmail(),
-                    user.getFirstName(),
-                    user.getLastName(),
-                    user.getNic(),
-                    user.getTelephoneNumber(),
-                    user.getProfilePicture(),
-                    user.getAddress(),
-                    user.getRole(),
+                    users.getUserId(),
+                    users.getEmail(),
+                    users.getFirstName(),
+                    users.getLastName(),
+                    users.getNic(),
+                    users.getTelephoneNumber(),
+                    users.getProfilePicture(),
+                    users.getAddress(),
+                    users.getRole(),
                     newGeneratedToken
             );
 

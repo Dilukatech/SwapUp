@@ -2,7 +2,7 @@ package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.dto.request.UserRegisterRequest;
 import com.example.commercialsite.dto.response.getAllUsersToAdmin;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.CustomerRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
@@ -51,24 +51,24 @@ public class UserServiceImpl implements UserService {
     public ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
         if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
             if (userRegisterRequest.getRole() == null || userRegisterRequest.getRole() == ""||userRegisterRequest.getRole() =="CUSTOMER") {
-                User user = modelMapper.map(userRegisterRequest, User.class);
-                user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
-                user.setActiveStatus(true);
-                user.setRole("CUSTOMER");
+                Users users = modelMapper.map(userRegisterRequest, Users.class);
+                users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
+                users.setActiveStatus(true);
+                users.setRole("CUSTOMER");
 
                 String randomCode = RandomString.make(64);
-                user.setVerificationCode(randomCode);
+                users.setVerificationCode(randomCode);
 
-                userRepo.save(user);
+                userRepo.save(users);
                 String siteURL="http://localhost:3000";
-                sendVerificationEmail( user, siteURL);
+                sendVerificationEmail(users, siteURL);
                 return new ResponseEntity<>("please check your mail for verify your account",HttpStatus.OK);
             } else {
-                User user = modelMapper.map(userRegisterRequest, User.class);
-                user.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
-                user.setActiveStatus(true);
-                userRepo.save(user);
-                return new ResponseEntity<>("saved " + user.getRole(),HttpStatus.OK);
+                Users users = modelMapper.map(userRegisterRequest, Users.class);
+                users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
+                users.setActiveStatus(true);
+                userRepo.save(users);
+                return new ResponseEntity<>("saved " + users.getRole(),HttpStatus.OK);
             }
         }else{
             return new ResponseEntity<>("this user name already exist",HttpStatus.CONFLICT);
@@ -76,8 +76,8 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    private void sendVerificationEmail(User user, String siteURL) throws MessagingException, UnsupportedEncodingException {
-        String toAddress = user.getEmail();
+    private void sendVerificationEmail(Users users, String siteURL) throws MessagingException, UnsupportedEncodingException {
+        String toAddress = users.getEmail();
         String fromAddress = "swapup41@gmail.com";
         String senderName = "SwapUp";
         String subject = "Please verify your request";
@@ -94,8 +94,8 @@ public class UserServiceImpl implements UserService {
         helper.setTo(toAddress);
         helper.setSubject(subject);
 
-        content = content.replace("[[name]]", user.getFirstName()+" "+user.getLastName());
-        String verifyURL = siteURL + "/verifycode/" + user.getVerificationCode();
+        content = content.replace("[[name]]", users.getFirstName()+" "+ users.getLastName());
+        String verifyURL = siteURL + "/verifycode/" + users.getVerificationCode();
 
         content = content.replace("[[URL]]", verifyURL);
 
@@ -107,32 +107,32 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<?>  verifyCustomer(String code) {
-        User user=userRepo.findByVerificationCodeEquals(code);
-        if(user == null || user.isVerified()){
+        Users users =userRepo.findByVerificationCodeEquals(code);
+        if(users == null || users.isVerified()){
             return new ResponseEntity<>("InValid Request",HttpStatus.BAD_REQUEST);
         }else{
-            user.setVerificationCode(null);
-            user.setVerified(true);
-            userRepo.save(user);
+            users.setVerificationCode(null);
+            users.setVerified(true);
+            userRepo.save(users);
             return new ResponseEntity<>("Account Verified",HttpStatus.OK);
 
         }
     }
 
     @Override
-    public Optional<User> getUserById(Long userId) {
+    public Optional<Users> getUserById(Long userId) {
         return userRepo.findById(userId);
     }
 
     @Override
     public ResponseEntity<String> holdUser(Long userId) {
 
-        User user= userRepo.findById(userId).orElse(null);;
-        if(user == null || !user.isActiveStatus()){
+        Users users = userRepo.findById(userId).orElse(null);;
+        if(users == null || !users.isActiveStatus()){
             return new ResponseEntity<>("This User already hold",HttpStatus.BAD_REQUEST);
         }else{
-            user.setActiveStatus(false);
-            userRepo.save(user);
+            users.setActiveStatus(false);
+            userRepo.save(users);
             return new ResponseEntity<>("User put on hold.",HttpStatus.OK);
 
         }
@@ -140,12 +140,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> removeHoldFromUser(Long userId) {
-        User user= userRepo.findById(userId).orElse(null);;
-        if(user == null || user.isActiveStatus()){
+        Users users = userRepo.findById(userId).orElse(null);;
+        if(users == null || users.isActiveStatus()){
             return new ResponseEntity<>("this user already active.",HttpStatus.BAD_REQUEST);
         }else{
-            user.setActiveStatus(true);
-            userRepo.save(user);
+            users.setActiveStatus(true);
+            userRepo.save(users);
             return new ResponseEntity<>("removed Hold From User.",HttpStatus.OK);
 
         }
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<List<getAllUsersToAdmin>> getAllUsers() {
-        List<User> users = userRepo.findAll();
+        List<Users> users = userRepo.findAll();
         if(users.size()>0) {
             List<getAllUsersToAdmin> getAllUsers = userMapper.entityListTogetAllUsersToAdminDtoList(users);
 
@@ -165,10 +165,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User getCustomer(String email) {
+    public Users getCustomer(String email) {
         if(userRepo.existsByEmailEquals(email)){
-            User user = userRepo.findByEmailEquals(email);
-            return user;
+            Users users = userRepo.findByEmailEquals(email);
+            return users;
         }else{
             return null;
         }

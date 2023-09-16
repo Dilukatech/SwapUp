@@ -3,7 +3,7 @@ package com.example.commercialsite.service.serviceImpl;
 import com.example.commercialsite.dto.ItemDTO;
 import com.example.commercialsite.entity.Favorite;
 import com.example.commercialsite.entity.Item;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.FavoriteRepo;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.repository.UserRepo;
@@ -40,10 +40,10 @@ public class FavoriteServiceIMPL implements FavoriteService {
 
     @Override
     public void addToFavorites(Long userId, Long itemId) {
-        User user = userRepo.findById(userId).orElse(null);
+        Users users = userRepo.findById(userId).orElse(null);
         Item item = itemRepo.findById(itemId).orElse(null);
 
-        if (user == null) {
+        if (users == null) {
             throw new RuntimeException("User not found");
         }
 
@@ -52,18 +52,18 @@ public class FavoriteServiceIMPL implements FavoriteService {
         }
 
         // Check if the item is already in the customer's favorites before adding
-        if(!isItemInFavorites(user,item)){
+        if(!isItemInFavorites(users,item)){
             Favorite favorite = new Favorite();
-            favorite.setUser(user);
+            favorite.setUsers(users);
             favorite.setItem(item);
             favoriteRepo.save(favorite);
         }
     }
 
-    private boolean isItemInFavorites(User user, Item item) {
+    private boolean isItemInFavorites(Users users, Item item) {
 
         // Get the list of favorites for the customer from the database.
-        List<Favorite> favorites = favoriteRepo.findByUser(user);
+        List<Favorite> favorites = favoriteRepo.findByUsers(users);
 
         // Check if the item is in the list of favorites.
         for(Favorite favorite : favorites){
@@ -79,10 +79,10 @@ public class FavoriteServiceIMPL implements FavoriteService {
     @Override
     public void deleteFromFavorites(Long userId, Long itemId) {
 
-        User user = userRepo.findById(userId).orElse(null);
+        Users users = userRepo.findById(userId).orElse(null);
         Item item = itemRepo.findById(itemId).orElse(null);
 
-        if (user == null) {
+        if (users == null) {
             throw new RuntimeException("User not found");
         }
 
@@ -91,7 +91,7 @@ public class FavoriteServiceIMPL implements FavoriteService {
         }
 
         // Find the favorite entry for the customer and item combination
-        Favorite favorite = favoriteRepo.findByUserAndItem(user,item);
+        Favorite favorite = favoriteRepo.findByUsersAndItem(users,item);
         if(favorite != null){
             favoriteRepo.delete(favorite);
         }
@@ -99,14 +99,14 @@ public class FavoriteServiceIMPL implements FavoriteService {
 
     @Override
     public List<ItemDTO> getFavoriteItemByUserId(Long userId) {
-        Optional<User> userOptional = userService.getUserById(userId);
+        Optional<Users> userOptional = userService.getUserById(userId);
         if(userOptional.isEmpty()) {
             // Handle case when customer is not found
             return Collections.emptyList();
         }
 
-        User user = userOptional.get();
-        List<Favorite> favorites = favoriteRepo.findByUser(user);
+        Users users = userOptional.get();
+        List<Favorite> favorites = favoriteRepo.findByUsers(users);
         List<Item> favoriteItems = favorites.stream().map(Favorite::getItem).collect(Collectors.toList());
 
         // Convert List<Item> to List<ItemDTO> using the ItemMapper
