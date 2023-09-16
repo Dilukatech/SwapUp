@@ -41,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/verification",params = "code")
-    public ResponseEntity<?> verifyCustomer(@RequestParam(value = "code")String code)throws Exception{
+    public ResponseEntity<?> verifyCustomer(@RequestParam(value = "code")String code) {
         return userService.verifyCustomer(code);
     }
 
