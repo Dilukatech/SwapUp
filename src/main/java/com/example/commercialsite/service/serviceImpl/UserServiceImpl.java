@@ -3,7 +3,6 @@ package com.example.commercialsite.service.serviceImpl;
 import com.example.commercialsite.dto.request.UserRegisterRequest;
 import com.example.commercialsite.dto.response.getAllUsersToAdmin;
 import com.example.commercialsite.entity.Users;
-import com.example.commercialsite.repository.CustomerRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
 import com.example.commercialsite.utill.UserMapper;
@@ -28,8 +27,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
-    @Autowired
-    private CustomerRepo customerRepo;
+//    @Autowired
+//    private CustomerRepo customerRepo;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -49,35 +48,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
+        /* if user does not exist */
         if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
-            if (// userRegisterRequest.getRole().isEmpty() ||  redundant
-                    userRegisterRequest.getRole().isEmpty() || // changed ==("") with .isEmpty()
-                    userRegisterRequest.getRole().equals("CUSTOMER") // changed == "CUSTOMER" to .equals()
-                )
-            {
-                Users users = modelMapper.map(userRegisterRequest, Users.class);
-                users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
-                users.setActiveStatus(true);
-                users.setRole("CUSTOMER");
+            // user does not exist      // removed previous redundant validations
+            Users users = modelMapper.map(userRegisterRequest, Users.class);
+            users.setEmail(userRegisterRequest.getEmail());
+            users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
+            users.setFirstName(userRegisterRequest.getFirstName());
+            users.setLastName(userRegisterRequest.getLastName());
+            users.setNic(userRegisterRequest.getNic());
+            users.setTelephone(userRegisterRequest.getTelephone());
+            users.setProfilePicture(userRegisterRequest.getProfilePicture());
+            users.setAddress(userRegisterRequest.getAddress());
+            users.setRole(userRegisterRequest.getRole());
+            users.setActiveStatus(true); // user is enabled at profile creation
 
-                String randomCode = RandomString.make(64);
-                users.setVerificationCode(randomCode);
+            String randomCode = RandomString.make(64); // random code for verification
+            users.setVerificationCode(randomCode);
 
-                userRepo.save(users);
-                String siteURL="http://localhost:3000";
-                sendVerificationEmail(users, siteURL);
-                return new ResponseEntity<>("please check your mail for verify your account",HttpStatus.OK);
-            } else {
-                Users users = modelMapper.map(userRegisterRequest, Users.class);
-                users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
-                users.setActiveStatus(true);
-                userRepo.save(users);
-                return new ResponseEntity<>("saved " + users.getRole(),HttpStatus.OK);
-            }
-        }else{
+            userRepo.save(users);
+
+            String siteURL="http://localhost:3000";
+            sendVerificationEmail(users, siteURL);
+
+            return new ResponseEntity<>("please check your mail for verify your account",HttpStatus.OK);
+
+        } else { // user does exist
             return new ResponseEntity<>("this user name already exist",HttpStatus.CONFLICT);
         }
-
     }
 
     private void sendVerificationEmail(Users users, String siteURL) throws MessagingException, UnsupportedEncodingException {
@@ -131,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> holdUser(Long userId) {
 
-        Users users = userRepo.findById(userId).orElse(null);;
+        Users users = userRepo.findById(userId).orElse(null);
         if(users == null || !users.isActiveStatus()){
             return new ResponseEntity<>("This User already hold",HttpStatus.BAD_REQUEST);
         }else{
@@ -144,7 +142,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ResponseEntity<String> removeHoldFromUser(Long userId) {
-        Users users = userRepo.findById(userId).orElse(null);;
+        Users users = userRepo.findById(userId).orElse(null);
         if(users == null || users.isActiveStatus()){
             return new ResponseEntity<>("this user already active.",HttpStatus.BAD_REQUEST);
         }else{
@@ -171,8 +169,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Users getCustomer(String email) {
         if(userRepo.existsByEmailEquals(email)){
-            Users users = userRepo.findByEmailEquals(email);
-            return users;
+            return userRepo.findByEmailEquals(email);
         }else{
             return null;
         }

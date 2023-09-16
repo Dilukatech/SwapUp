@@ -34,8 +34,8 @@ public class Users {
     @Column(name = "nic",length = 13)
     private String nic;
 
-    @Column(name = "telephone_number")
-    private String telephoneNumber;
+    @Column(name = "telephone")
+    private String telephone;
 
     @Column(name = "profile_picture")
     private String profilePicture;

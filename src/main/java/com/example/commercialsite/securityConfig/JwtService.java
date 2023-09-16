@@ -58,7 +58,7 @@ public class JwtService implements UserDetailsService {
                     users.getFirstName(),
                     users.getLastName(),
                     users.getNic(),
-                    users.getTelephoneNumber(),
+                    users.getTelephone(),
                     users.getProfilePicture(),
                     users.getAddress(),
                     users.getRole(),
