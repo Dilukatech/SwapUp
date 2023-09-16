@@ -50,7 +50,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
         if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
-            if (userRegisterRequest.getRole() == null || userRegisterRequest.getRole() == ""||userRegisterRequest.getRole() =="CUSTOMER") {
+            if (// userRegisterRequest.getRole().isEmpty() ||  redundant
+                    userRegisterRequest.getRole().isEmpty() || // changed ==("") with .isEmpty()
+                    userRegisterRequest.getRole().equals("CUSTOMER") // changed == "CUSTOMER" to .equals()
+                )
+            {
                 Users users = modelMapper.map(userRegisterRequest, Users.class);
                 users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
                 users.setActiveStatus(true);
