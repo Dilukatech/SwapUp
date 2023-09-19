@@ -12,5 +12,7 @@ public interface UserRepo extends JpaRepository<Users,Long> {
     boolean existsByEmailEquals(String email);
     Users findByVerificationCodeEquals(String code);
     Users findByEmailEquals(String email);
+    // trying to fuse Usermapper with the UserRepo
+    //List<UsersDTO> entityListToUsersDTODtoList(List<Users> users); // previous method // findAll() might give the supposed result
 
 }

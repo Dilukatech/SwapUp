@@ -1,24 +1,24 @@
 package com.example.commercialsite.service.serviceImpl;
 
-import com.example.commercialsite.dto.request.UserRegisterRequest;
-import com.example.commercialsite.dto.response.getAllUsersToAdmin;
+import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
-import com.example.commercialsite.utill.UserMapper;
+import com.example.commercialsite.utill.FromDTO;
+import com.example.commercialsite.utill.ToDTO;
 import net.bytebuddy.utility.RandomString;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,41 +27,22 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepo userRepo;
 
-//    @Autowired
-//    private CustomerRepo customerRepo;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private ModelMapper modelMapper;
-
     @Autowired
     private JavaMailSender mailSender;
 
     @Autowired
-    private UserMapper userMapper;
+    private ToDTO toDTO;
 
-    public String getEncodedPassword(String passWord){
-        return passwordEncoder.encode(passWord);
-    }
+    @Autowired
+    private FromDTO fromDTO;
+
 
     @Override
-    public ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException {
+    public ResponseEntity<String> registerUser(UserRegisterRequestDTO userRegisterRequestDTO) throws MessagingException, UnsupportedEncodingException {
         /* if user does not exist */
-        if (!userRepo.existsByEmailEquals(userRegisterRequest.getEmail())) {
+        if (!userRepo.existsByEmailEquals(userRegisterRequestDTO.getEmail())) {
             // user does not exist      // removed previous redundant validations
-            Users users = modelMapper.map(userRegisterRequest, Users.class);
-            users.setEmail(userRegisterRequest.getEmail());
-            users.setPassword(getEncodedPassword(userRegisterRequest.getPassword()));
-            users.setFirstName(userRegisterRequest.getFirstName());
-            users.setLastName(userRegisterRequest.getLastName());
-            users.setNic(userRegisterRequest.getNic());
-            users.setTelephone(userRegisterRequest.getTelephone());
-            users.setProfilePicture(userRegisterRequest.getProfilePicture());
-            users.setAddress(userRegisterRequest.getAddress());
-            users.setRole(userRegisterRequest.getRole());
-            users.setActiveStatus(true); // user is enabled at profile creation
+            Users users = fromDTO.getUsers(userRegisterRequestDTO); // take userRegister request and spit a users object
 
             String randomCode = RandomString.make(64); // random code for verification
             users.setVerificationCode(randomCode);
@@ -154,24 +135,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<List<getAllUsersToAdmin>> getAllUsers() {
+    public ResponseEntity<List<UsersDTO>> getAllUsers() {
         List<Users> users = userRepo.findAll();
-        if(users.size()>0) {
-            List<getAllUsersToAdmin> getAllUsers = userMapper.entityListTogetAllUsersToAdminDtoList(users);
-
-            return new ResponseEntity<>(getAllUsers, HttpStatus.OK);
-        }else{
+        List<UsersDTO> usersDTOList = new ArrayList<>();  // an empty list to store all userDTO objects
+        if (!users.isEmpty()) { //users list is not empty
+            for (Users user : users) {
+                usersDTOList.add(toDTO.getUsersDTO(user));
+            }
+            return new ResponseEntity<>(usersDTOList, HttpStatus.OK);
+        } else { // users list is empty
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
 
-    @Override
-    public Users getCustomer(String email) {
-        if(userRepo.existsByEmailEquals(email)){
-            return userRepo.findByEmailEquals(email);
-        }else{
-            return null;
-        }
-    }
-}
+} // end of public class userservies.impl

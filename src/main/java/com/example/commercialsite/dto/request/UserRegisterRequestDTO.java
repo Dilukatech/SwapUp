@@ -1,18 +1,15 @@
-package com.example.commercialsite.dto.response;
+package com.example.commercialsite.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class getAllUsersToAdmin {
-
-    private Long userId;
+public class UserRegisterRequestDTO {
     private String email;
+    private String password;
     private String firstName;
     private String lastName;
     private String nic;
@@ -20,6 +17,4 @@ public class getAllUsersToAdmin {
     private String profilePicture;
     private String address;
     private String role;
-    private boolean activeStatus;
-    private boolean verified;
 }

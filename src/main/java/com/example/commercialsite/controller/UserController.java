@@ -3,7 +3,7 @@ package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.dto.request.UserRegisterRequest;
+import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,15 +24,15 @@ public class UserController {
 
 
     @PostMapping(path = "/register-customer")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
 //        userService.sendVerificationEmail(userRegisterRequest);
-        return userService.registerUser(userRegisterRequest);
+        return userService.registerUser(userRegisterRequestDTO);
     }
 
     @PostMapping(path = "/register-staff")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
-        return userService.registerUser(userRegisterRequest);
+    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
+        return userService.registerUser(userRegisterRequestDTO);
     }
 
     @PostMapping({"/login"})
