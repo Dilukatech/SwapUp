@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class FavoriteServiceIMPL implements FavoriteService {
+public class FavoriteServiceImpl implements FavoriteService {
 
     @Autowired
     private FavoriteRepo favoriteRepo;

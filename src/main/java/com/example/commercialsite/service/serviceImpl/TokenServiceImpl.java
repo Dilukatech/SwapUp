@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 import static com.example.commercialsite.modules.GenerateToken.getMd5;
 
 @Service
-public class TokenServiceIMPL implements TokenService {
+public class TokenServiceImpl implements TokenService {
     @Autowired
     private RequestTokenRepo requestTokenRepo;
 
     public Token GenerateToken (Long requestTokenId, int price) throws NoSuchAlgorithmException {
-        //requesttoken object
+        //requestToken object
         RequestToken requestToken = requestTokenRepo.getReferenceById(requestTokenId);
         //new token object
         Token token = new Token();
