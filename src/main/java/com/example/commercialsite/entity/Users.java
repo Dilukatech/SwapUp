@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor //
 @NoArgsConstructor
 @Getter
-@Entity(name = "User") // hibernate annotations
+@Entity(name = "Users") // hibernate annotations
 @Table(name = "users")
 @Data
 public class Users {
