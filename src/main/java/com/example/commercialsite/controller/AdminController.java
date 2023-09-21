@@ -1,7 +1,6 @@
 package com.example.commercialsite.controller;
 
-import com.example.commercialsite.dto.response.getAllUsersToAdmin;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +25,7 @@ public class AdminController {
     }
 
     @GetMapping(path = "/get-all-users")
-    public ResponseEntity<List<getAllUsersToAdmin>> getAllUsers(){
+    public ResponseEntity<List<UsersDTO>> getAllUsers(){
         return userService.getAllUsers();
     }
 

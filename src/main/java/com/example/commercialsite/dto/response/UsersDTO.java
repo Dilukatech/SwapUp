@@ -1,4 +1,4 @@
-package com.example.commercialsite.dto.request;
+package com.example.commercialsite.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class UserRegisterRequest {
+public class UsersDTO {
+
+    private Long userId;
     private String email;
-    private String password;
     private String firstName;
     private String lastName;
     private String nic;
@@ -17,4 +18,6 @@ public class UserRegisterRequest {
     private String profilePicture;
     private String address;
     private String role;
+    private boolean activeStatus;
+    private boolean verified;
 }

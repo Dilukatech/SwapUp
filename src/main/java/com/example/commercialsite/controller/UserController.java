@@ -2,16 +2,13 @@ package com.example.commercialsite.controller;
 
 
 import com.example.commercialsite.dto.request.LoginRequest;
+import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.dto.request.UserRegisterRequest;
-import com.example.commercialsite.entity.User;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
 import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +25,15 @@ public class UserController {
 
 
     @PostMapping(path = "/register-customer")
-    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
+    public ResponseEntity<String> registerUser(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
 //        userService.sendVerificationEmail(userRegisterRequest);
-        return userService.registerUser(userRegisterRequest);
+        return userService.registerUser(userRegisterRequestDTO);
     }
 
     @PostMapping(path = "/register-staff")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequest userRegisterRequest) throws Exception {
-        return userService.registerUser(userRegisterRequest);
+    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
+        return userService.registerUser(userRegisterRequestDTO);
     }
 
     @PostMapping({"/login"})
@@ -45,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/verification",params = "code")
-    public ResponseEntity<?> verifyCustomer(@RequestParam(value = "code")String code)throws Exception{
+    public ResponseEntity<?> verifyCustomer(@RequestParam(value = "code")String code) {
         return userService.verifyCustomer(code);
     }
 

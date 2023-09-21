@@ -1,8 +1,8 @@
 package com.example.commercialsite.service;
 
-import com.example.commercialsite.dto.request.UserRegisterRequest;
-import com.example.commercialsite.dto.response.getAllUsersToAdmin;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.Users;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
@@ -12,14 +12,10 @@ import java.util.Optional;
 
 public interface UserService {
 
-    ResponseEntity<String> registerUser(UserRegisterRequest userRegisterRequest) throws MessagingException, UnsupportedEncodingException;
+    ResponseEntity<String> registerUser(UserRegisterRequestDTO userRegisterRequestDTO) throws MessagingException, UnsupportedEncodingException;
     ResponseEntity<?>  verifyCustomer(String code);
-    Optional<User> getUserById(Long userId);
+    Optional<Users> getUserById(Long userId);
     ResponseEntity<String> holdUser(Long userId);
     ResponseEntity<String>removeHoldFromUser(Long userId);
-    ResponseEntity<List<getAllUsersToAdmin>> getAllUsers();
-
-
-
-    User getCustomer(String email);
+    ResponseEntity<List<UsersDTO>> getAllUsers(); // return a list of users objects
 }

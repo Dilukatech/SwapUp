@@ -2,16 +2,13 @@ package com.example.commercialsite.securityConfig;
 
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.entity.RequestToken;
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.UserRepo;
-import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,108 +28,56 @@ public class JwtService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepo.findByEmail(username)
+        Users users = userRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .roles(user.getRole())
+                .withUsername(users.getEmail())
+                .password(users.getPassword())
+                .roles(users.getRole())
                 .build();
     }
 
-    public ResponseEntity<StandardResponse> createJwtToken(LoginRequest loginRequest) throws Exception {
+
+    public ResponseEntity<AuthResponse> createJwtToken(LoginRequest loginRequest) throws Exception {
         String userName = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
-        User user = userRepo.findByEmail(userName).orElse(null);
-        if (user == null || !user.isActiveStatus()) {
-            return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(401, "This Account is Deactivated", new AuthResponse()),
-                    HttpStatus.UNAUTHORIZED);
+        Users users = userRepo.findByEmail(userName).orElse(null);
+        if (users == null || !users.isActiveStatus()) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
-            try {
-                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
-                UserDetails userDetails = loadUserByUsername(userName);
-                String newGeneratedToken = jwtUtil.generateToken(userDetails);
+            authenticate(userName, userPassword);
 
-                AuthResponse authResponse = new AuthResponse(
-                        user.getUserId(),
-                        user.getEmail(),
-                        user.getFirstName(),
-                        user.getLastName(),
-                        user.getNic(),
-                        user.getTelephone(),
-                        user.getProfilePicture(),
-                        user.getAddress(),
-                        user.getRole(),
-                        newGeneratedToken
-                );
+            UserDetails userDetails = loadUserByUsername(userName);
+            String newGeneratedToken = jwtUtil.generateToken(userDetails);
 
-                return new ResponseEntity<StandardResponse>(
-                        new StandardResponse(200, "Successfully logged in.", authResponse),
-                        HttpStatus.OK);
+            AuthResponse authResponse = new AuthResponse(
+                    users.getUserId(),
+                    users.getEmail(),
+                    users.getFirstName(),
+                    users.getLastName(),
+                    users.getNic(),
+                    users.getTelephone(),
+                    users.getProfilePicture(),
+                    users.getAddress(),
+                    users.getRole(),
+                    newGeneratedToken
+            );
 
-            } catch (BadCredentialsException e) {
-                // Handle bad credentials and return an error response
-                return new ResponseEntity<StandardResponse>(
-                        new StandardResponse(401, "Invalid credentials", new AuthResponse()),
-                        HttpStatus.UNAUTHORIZED);
-            }
+            return new ResponseEntity<>(authResponse, HttpStatus.OK);
         }
     }
 
 
-//    public ResponseEntity<StandardResponse> createJwtToken(LoginRequest loginRequest) throws Exception {
-//        String userName = loginRequest.getUserName();
-//        String userPassword = loginRequest.getUserPassword();
-//
-//        User user = userRepo.findByEmail(userName).orElse(null);
-//        if (user == null || !user.isActiveStatus()) {
-////            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-//            return new ResponseEntity<StandardResponse>(
-//                    new StandardResponse(401,"This Account is Deactivated", new AuthResponse()),
-//                    HttpStatus.UNAUTHORIZED);
-//        } else {
-//            authenticate(userName, userPassword);
-//
-//
-//            UserDetails userDetails = loadUserByUsername(userName);
-//            String newGeneratedToken = jwtUtil.generateToken(userDetails);
-//
-//            AuthResponse authResponse = new AuthResponse(
-//                    user.getUserId(),
-//                    user.getEmail(),
-//                    user.getFirstName(),
-//                    user.getLastName(),
-//                    user.getNic(),
-//                    user.getTelephone(),
-//                    user.getProfilePicture(),
-//                    user.getAddress(),
-//                    user.getRole(),
-//                    newGeneratedToken
-//            );
-//
-////            return new ResponseEntity<>(authResponse, HttpStatus.OK);
-//            return new ResponseEntity<StandardResponse>(
-//                    new StandardResponse(200,"successfully logged.", authResponse),
-//                    HttpStatus.OK);
-//        }
-//    }
-//
-//
-//        private void authenticate(String userName,String userPassword) throws Exception {
-//            try {
-//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName, userPassword));
-//            } catch (BadCredentialsException e) {
-//                throw new Exception("invalid credentials",e );
-//            }
-//        }
-
-
-
-
-}
+        private void authenticate(String userName,String userPassword) throws Exception{
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,userPassword));
+            }catch (BadCredentialsException e){
+                throw new Exception("invalid credentials",e);
+            }
+        }
+    }
 
 
 

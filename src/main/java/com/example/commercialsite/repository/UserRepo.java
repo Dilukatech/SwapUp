@@ -1,16 +1,18 @@
 package com.example.commercialsite.repository;
 
-import com.example.commercialsite.entity.User;
+import com.example.commercialsite.entity.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepo extends JpaRepository<User,Long> {
-    Optional<User> findByEmail(String email);
+public interface UserRepo extends JpaRepository<Users,Long> {
+    Optional<Users> findByEmail(String email);
     boolean existsByEmailEquals(String email);
-    User findByVerificationCodeEquals(String code);
-    User findByEmailEquals(String email);
+    Users findByVerificationCodeEquals(String code);
+    Users findByEmailEquals(String email);
+    // trying to fuse Usermapper with the UserRepo
+    //List<UsersDTO> entityListToUsersDTODtoList(List<Users> users); // previous method // findAll() might give the supposed result
 
 }

@@ -18,8 +18,8 @@ public class Customer {
     private Long tokenId;
 
     @OneToOne
-    @JoinColumn(name = "user_ID")
-    private User user;
+    @JoinColumn(name = "users_ID")
+    private Users users;
 
 
 }

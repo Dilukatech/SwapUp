@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Getter
-@Entity(name = "User")
-@Table(name = "users")
-@AllArgsConstructor
+@AllArgsConstructor //
 @NoArgsConstructor
+@Getter
+@Entity(name = "User") // hibernate annotations
+@Table(name = "users")
 @Data
-public class User {
+public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
@@ -34,8 +34,8 @@ public class User {
     @Column(name = "nic",length = 13)
     private String nic;
 
-    @Column(name = "telephone_number")
-    private String telephoneNumber;
+    @Column(name = "telephone")
+    private String telephone;
 
     @Column(name = "profile_picture")
     private String profilePicture;
