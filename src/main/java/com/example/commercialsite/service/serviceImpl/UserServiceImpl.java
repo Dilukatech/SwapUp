@@ -1,8 +1,11 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.HoldUser;
 import com.example.commercialsite.entity.Users;
+import com.example.commercialsite.repository.HoldUserRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.UserService;
 import com.example.commercialsite.utill.FromDTO;
@@ -17,7 +20,9 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.persistence.Column;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private FromDTO fromDTO;
+
+    @Autowired
+    private HoldUserRepo holdUserRepo;
 
 
     @Override
@@ -107,32 +115,32 @@ public class UserServiceImpl implements UserService {
         return userRepo.findById(userId);
     }
 
-    @Override
-    public ResponseEntity<String> holdUser(Long userId) {
-
-        Users users = userRepo.findById(userId).orElse(null);
-        if(users == null || !users.isActiveStatus()){
-            return new ResponseEntity<>("This User already hold",HttpStatus.BAD_REQUEST);
-        }else{
-            users.setActiveStatus(false);
-            userRepo.save(users);
-            return new ResponseEntity<>("User put on hold.",HttpStatus.OK);
-
-        }
-    }
-
-    @Override
-    public ResponseEntity<String> removeHoldFromUser(Long userId) {
-        Users users = userRepo.findById(userId).orElse(null);
-        if(users == null || users.isActiveStatus()){
-            return new ResponseEntity<>("this user already active.",HttpStatus.BAD_REQUEST);
-        }else{
-            users.setActiveStatus(true);
-            userRepo.save(users);
-            return new ResponseEntity<>("removed Hold From User.",HttpStatus.OK);
-
-        }
-    }
+//    @Override
+//    public ResponseEntity<String> holdUser(Long userId) {
+//
+//        Users users = userRepo.findById(userId).orElse(null);
+//        if(users == null || !users.isActiveStatus()){
+//            return new ResponseEntity<>("This User already hold",HttpStatus.BAD_REQUEST);
+//        }else{
+//            users.setActiveStatus(false);
+//            userRepo.save(users);
+//            return new ResponseEntity<>("User put on hold.",HttpStatus.OK);
+//
+//        }
+//    }
+//
+//    @Override
+//    public ResponseEntity<String> removeHoldFromUser(Long userId) {
+//        Users users = userRepo.findById(userId).orElse(null);
+//        if(users == null || users.isActiveStatus()){
+//            return new ResponseEntity<>("this user already active.",HttpStatus.BAD_REQUEST);
+//        }else{
+//            users.setActiveStatus(true);
+//            userRepo.save(users);
+//            return new ResponseEntity<>("removed Hold From User.",HttpStatus.OK);
+//
+//        }
+//    }
 
     @Override
     public ResponseEntity<List<UsersDTO>> getAllUsers() {
@@ -148,5 +156,26 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
+    public ResponseEntity<String> holdAccount(HoldDto holdDto) {
+        Users users = userRepo.findByUserId(holdDto.getCustomerId());
 
-} // end of public class userservies.impl
+        if (users != null) { //customer is not empty
+            users.setActiveStatus(holdDto.getAction());  //set the action of customer as hold or remove hold
+            userRepo.save(users);
+
+            HoldUser holdUser = new HoldUser();
+            holdUser.setAdminId(holdDto.getAdminId());
+            holdUser.setCustomerId(holdUser.getCustomerId());
+            holdUser.setHoldTime(LocalDateTime.now());
+            holdUser.setReason(holdUser.getReason());
+            holdUserRepo.save(holdUser);    //saved request detail of hold user table
+
+            return new ResponseEntity<>("request Success.", HttpStatus.OK);
+        } else { // user is empty
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+}
