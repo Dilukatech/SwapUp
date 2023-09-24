@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class CustomerRequestTokenDto {
+public class RequestTokenRequestDto {
     private Long customerId;
     private String itemDescription;
     private String itemImage;
