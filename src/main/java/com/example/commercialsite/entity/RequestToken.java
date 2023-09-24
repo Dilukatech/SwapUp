@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
+
 @Entity(name = "RequestToken")
 @Table(name = "request_token")
 @AllArgsConstructor

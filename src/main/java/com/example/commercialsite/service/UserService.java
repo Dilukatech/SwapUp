@@ -1,5 +1,6 @@
 package com.example.commercialsite.service;
 
+import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.entity.Users;
@@ -15,7 +16,9 @@ public interface UserService {
     ResponseEntity<String> registerUser(UserRegisterRequestDTO userRegisterRequestDTO) throws MessagingException, UnsupportedEncodingException;
     ResponseEntity<?>  verifyCustomer(String code);
     Optional<Users> getUserById(Long userId);
-    ResponseEntity<String> holdUser(Long userId);
-    ResponseEntity<String>removeHoldFromUser(Long userId);
+//    ResponseEntity<String> holdUser(Long userId);
+//    ResponseEntity<String>removeHoldFromUser(Long userId);
     ResponseEntity<List<UsersDTO>> getAllUsers(); // return a list of users objects
+
+    ResponseEntity<String> holdAccount(HoldDto holdDto);
 }
