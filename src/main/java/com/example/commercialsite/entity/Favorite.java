@@ -8,7 +8,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 
-@Entity
+@Entity(name = "Favorite")
 @Table(name = "favorite_list")
 @AllArgsConstructor
 @NoArgsConstructor

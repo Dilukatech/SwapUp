@@ -6,6 +6,7 @@ import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.AuthResponse;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
+import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -36,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping({"/login"})
-    public ResponseEntity<AuthResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<StandardResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
         return jwtService.createJwtToken(loginRequest);
     }
 
