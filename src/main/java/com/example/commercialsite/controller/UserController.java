@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @PostMapping({"/login"})
-    public ResponseEntity<StandardResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
+    public ResponseEntity<AuthResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {
         return jwtService.createJwtToken(loginRequest);
     }
 
