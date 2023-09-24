@@ -46,6 +46,7 @@ public class Users {
     @Column(name="role")
     private String role;
 
+    @Getter
     @Column(name = "active_status")
     private boolean activeStatus;
 
@@ -54,7 +55,6 @@ public class Users {
 
     @Column(name = "verified")
     private boolean verified;
-
 
 }
 
