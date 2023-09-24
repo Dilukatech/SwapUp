@@ -30,9 +30,6 @@ public class Item {
     @Column(name = "gender",nullable = false)
     private String gender;
 
-//    @Column(name = "quality_status")
-//    private String qualityStatus;
-
     @Column(name = "type",nullable = false)
     private String type;
 
@@ -45,8 +42,7 @@ public class Item {
     @Column(name = "size", nullable = false)
     private String size;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "RequestTokenId", referencedColumnName = "requestTokenId")
+    @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
 
 }

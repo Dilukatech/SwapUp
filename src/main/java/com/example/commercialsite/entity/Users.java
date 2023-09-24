@@ -10,7 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor //
 @NoArgsConstructor
 @Getter
-@Entity(name = "User") // hibernate annotations
+@Entity(name = "Users") // hibernate annotations
 @Table(name = "users")
 @Data
 public class Users {
@@ -46,6 +46,7 @@ public class Users {
     @Column(name="role")
     private String role;
 
+    @Getter
     @Column(name = "active_status")
     private boolean activeStatus;
 
@@ -54,7 +55,6 @@ public class Users {
 
     @Column(name = "verified")
     private boolean verified;
-
 
 }
 

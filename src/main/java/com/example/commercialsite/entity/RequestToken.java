@@ -17,17 +17,34 @@ import java.time.LocalDateTime;
 public class RequestToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "request_token_id")
     private Long requestTokenId;
+
+    @Column(name = "customer_id")
     private Long customerId;
+
+    @Column(name = "item_id")
+    private Long itemId;
+
+    @Column(name = "quality_checker_id")
     private Long qualityCheckerId;
+
+    @Column(name = "status")
     private int status;
+
+    @Column(name = "item_Description")
     private String itemDescription;
+
+    @Column(name = "item_image")
     private String itemImage;
+
+    @Column(name = "request_date_time")
     private LocalDateTime requestDateTime;
 
 
     // data jpa relationship
-    @OneToOne(mappedBy = "requestToken", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "request_token_item_id", referencedColumnName = "item_id")
     private Item item;
 
 }

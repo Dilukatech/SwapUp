@@ -1,6 +1,8 @@
 package com.example.commercialsite.utill.utilimpl;
 
+import com.example.commercialsite.dto.request.RequestTokenRequestDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.utill.FromDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,19 +17,30 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
         return passwordEncoder.encode(passWord);
     }
     @Override
-    public Users getUsers(UserRegisterRequestDTO userRegisterRequestDTO) {
-        Users users = new Users();
-        users.setEmail(userRegisterRequestDTO.getEmail());
-        users.setPassword(getEncodedPassword(userRegisterRequestDTO.getPassword()));
-        users.setFirstName(userRegisterRequestDTO.getFirstName());
-        users.setLastName(userRegisterRequestDTO.getLastName());
-        users.setNic(userRegisterRequestDTO.getNic());
-        users.setTelephone(userRegisterRequestDTO.getTelephone());
-        users.setProfilePicture(userRegisterRequestDTO.getProfilePicture());
-        users.setAddress(userRegisterRequestDTO.getAddress());
-        users.setRole(userRegisterRequestDTO.getRole());
-        users.setActiveStatus(true); // user is enabled at profile creation
+    public Users getUsers(UserRegisterRequestDTO dto) {
+        Users entity = new Users();
+        entity.setEmail(dto.getEmail());
+        entity.setPassword(getEncodedPassword(dto.getPassword()));
+        entity.setFirstName(dto.getFirstName());
+        entity.setLastName(dto.getLastName());
+        entity.setNic(dto.getNic());
+        entity.setTelephone(dto.getTelephone());
+        entity.setProfilePicture(dto.getProfilePicture());
+        entity.setAddress(dto.getAddress());
+        entity.setRole(dto.getRole());
+        entity.setActiveStatus(true); // user is enabled at profile creation
 
-        return users;
+        return entity;
+    }
+
+    @Override
+    public RequestToken getRequestToken(RequestTokenRequestDto dto) {
+        RequestToken entity = new RequestToken();
+
+        entity.setCustomerId(dto.getCustomerId());
+        entity.setItemImage(dto.getItemImage());
+        entity.setItemDescription(dto.getItemDescription());
+
+        return entity;
     }
 }
