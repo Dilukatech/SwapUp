@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@AllArgsConstructor //
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "Users") // hibernate annotations
 @Table(name = "users")
