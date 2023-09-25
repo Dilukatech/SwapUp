@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class HelpAssistantImpl implements HelpAssistantService {
     @Autowired
@@ -70,4 +73,41 @@ public class HelpAssistantImpl implements HelpAssistantService {
                     HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Override
+    public ResponseEntity<StandardResponse> GetAllHelpRequestFromStatus(boolean status) {
+        List<HelpSupport> helpSupports = helpSupportRepo.findAllByStatusEquals(status); //get list of help request details
+        List<HelpRequestDto> dtoList = new ArrayList<>(); // create a empty dto list
+        if(!helpSupports.isEmpty()){ // help requests are not empty
+            for(HelpSupport helpSupport: helpSupports){
+                dtoList.add(toDTO.getHelpRequest(helpSupport));
+            }
+            return new ResponseEntity<>(
+                    new StandardResponse(200,"success.",dtoList ),
+                    HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>( //help requests are empty
+                    new StandardResponse(400,"Help request list is Empty.",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<StandardResponse> GetAllHelpRequests() {
+        List<HelpSupport> helpSupports = helpSupportRepo.findAll(); //get list of help request details
+        List<HelpRequestDto> dtoList = new ArrayList<>(); // create a empty dto list
+        if(!helpSupports.isEmpty()){ // help requests are not empty
+            for(HelpSupport helpSupport: helpSupports){
+                dtoList.add(toDTO.getHelpRequest(helpSupport));
+            }
+            return new ResponseEntity<>(
+                    new StandardResponse(200,"get help request successfully.",dtoList ),
+                    HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>( //help requests are empty
+                    new StandardResponse(400,"Help request list is Empty.",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
 }
+

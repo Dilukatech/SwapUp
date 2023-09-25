@@ -23,4 +23,15 @@ public class HelpAssistant {
     public ResponseEntity<StandardResponse> GetHelpRequestFromHelpAssistant(@PathVariable Long helpRequestId){
       return helpAssistantService.GetHelpRequestFromHelpRequestId(helpRequestId);
     }
+
+    @GetMapping(value = "GetHelpRequestsFromStatus",params = "status")
+    public ResponseEntity<StandardResponse> GetAllHelpRequestFromStatus(@RequestParam(value = "status") boolean status){
+      return helpAssistantService.GetAllHelpRequestFromStatus(status);
+    }
+
+  @GetMapping(value = "GetHelpRequests")
+  public ResponseEntity<StandardResponse> GetAllHelpRequests(){
+    return helpAssistantService.GetAllHelpRequests();
+  }
+
 }

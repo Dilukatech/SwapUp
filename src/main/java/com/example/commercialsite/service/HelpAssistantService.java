@@ -8,4 +8,8 @@ public interface HelpAssistantService {
     ResponseEntity<StandardResponse> CheckHelpRequest(CheckHelpDto checkHelpDto);
 
     ResponseEntity<StandardResponse> GetHelpRequestFromHelpRequestId(Long helpRequestId);
+
+    ResponseEntity<StandardResponse> GetAllHelpRequestFromStatus(boolean status);
+
+    ResponseEntity<StandardResponse> GetAllHelpRequests();
 }

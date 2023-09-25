@@ -60,7 +60,6 @@ public class ToDTOImpl implements ToDTO {
         dto.setSubject(helpSupport.getSubject());
         dto.setMessage(helpSupport.getMessage());
         dto.setReply(helpSupport.getReply());
-//        dto.setStatus(helpSupport.getS);
         dto.setStatus(helpSupport.isStatus());
 
 
