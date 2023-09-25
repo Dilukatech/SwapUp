@@ -1,6 +1,7 @@
 package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.dto.request.CheckHelpDto;
+import com.example.commercialsite.dto.response.HelpRequestDto;
 import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.repository.HelpSupportRepo;
 import com.example.commercialsite.service.HelpAssistantService;
@@ -20,6 +21,9 @@ public class HelpAssistantImpl implements HelpAssistantService {
     @Autowired
     private FromDTO fromDTO;
 
+    @Autowired
+    private  ToDTO toDTO;
+
     @Override
     public ResponseEntity<StandardResponse> CheckHelpRequest(CheckHelpDto checkHelpDto) {
         //help request cant null and check help request id is null
@@ -38,12 +42,32 @@ public class HelpAssistantImpl implements HelpAssistantService {
         } else {
             //the ID is null or the user does not exist.
             return new ResponseEntity<>(
-                    new StandardResponse(404,"request id not found",null ),
-                    HttpStatus.NOT_FOUND
+                    new StandardResponse(400,"request id not found",null ),
+                    HttpStatus.BAD_REQUEST
             );
 
 
         }
 
+    }
+
+    @Override
+    public ResponseEntity<StandardResponse> GetHelpRequestFromHelpRequestId(Long helpRequestId) {
+        //get data to entity using help request id
+        HelpSupport helpSupport = helpSupportRepo.getReferenceById(helpRequestId);
+        //has a help request for help request id
+        if(helpSupport != null){
+            //convert the entity to dto
+            HelpRequestDto helpRequestDto = toDTO.getHelpRequest(helpSupport);
+
+            return new ResponseEntity<>(
+                    new StandardResponse(400,"request success.",helpRequestDto ),
+                    HttpStatus.OK);
+
+        }else { //haven't a help request for relevant help request id
+            return new ResponseEntity<>(
+                    new StandardResponse(400,"request id not found.",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 }

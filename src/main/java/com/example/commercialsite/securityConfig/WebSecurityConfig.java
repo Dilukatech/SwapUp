@@ -45,7 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/quality-checker/accept-request-token",
                         "/api/v1/customer/RequestTokenFromCustomer","/api/v1/customer/AllRequestTokenFromCustomer","/api/v1/user/register-customer",
                         "/api/v1/quality-checker/reject-request-token",
-                        "/api/v1/help-assistant/CheckHelpRequestFromHelpAssistant")
+                        "/api/v1/help-assistant/CheckHelpRequestFromHelpAssistant","/api/v1/help-assistant/GetHelpRequestFromHelpAssistant/{helpRequestId}")
                         .permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()

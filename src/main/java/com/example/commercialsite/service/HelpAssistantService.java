@@ -6,4 +6,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface HelpAssistantService {
     ResponseEntity<StandardResponse> CheckHelpRequest(CheckHelpDto checkHelpDto);
+
+    ResponseEntity<StandardResponse> GetHelpRequestFromHelpRequestId(Long helpRequestId);
 }

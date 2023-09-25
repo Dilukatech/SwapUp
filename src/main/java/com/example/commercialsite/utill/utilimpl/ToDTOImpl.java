@@ -1,11 +1,15 @@
 package com.example.commercialsite.utill.utilimpl;
 
+import com.example.commercialsite.dto.response.HelpRequestDto;
 import com.example.commercialsite.dto.response.RequestTokenResponseDto;
 import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.utill.ToDTO;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @Service
 public class ToDTOImpl implements ToDTO {
@@ -41,6 +45,24 @@ public class ToDTOImpl implements ToDTO {
         dto.setItemDescription(requestToken.getItemDescription());
         dto.setItemImage(requestToken.getItemImage());
         dto.setRequestDateTime(requestToken.getRequestDateTime());
+
+        return dto;
+    }
+
+    @Override
+    public HelpRequestDto getHelpRequest(HelpSupport helpSupport) {
+        HelpRequestDto dto = new HelpRequestDto();
+
+        dto.setHelpRequestId(helpSupport.getHelpRequestId());
+        dto.setHelpAssistantId(helpSupport.getHelpAssistantId());
+        dto.setCustomerId(helpSupport.getCustomerId());
+        dto.setReceivedTime(helpSupport.getReceivedTime());
+        dto.setSubject(helpSupport.getSubject());
+        dto.setMessage(helpSupport.getMessage());
+        dto.setReply(helpSupport.getReply());
+//        dto.setStatus(helpSupport.getS);
+        dto.setStatus(helpSupport.isStatus());
+
 
         return dto;
     }

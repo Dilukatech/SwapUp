@@ -18,4 +18,9 @@ public class HelpAssistant {
     public ResponseEntity<StandardResponse> CheckHelpRequestFromHelpAssistant(@RequestBody CheckHelpDto checkHelpDto){
         return helpAssistantService.CheckHelpRequest(checkHelpDto);
     }
+
+    @GetMapping("/GetHelpRequestFromHelpAssistant/{helpRequestId}")
+    public ResponseEntity<StandardResponse> GetHelpRequestFromHelpAssistant(@PathVariable Long helpRequestId){
+      return helpAssistantService.GetHelpRequestFromHelpRequestId(helpRequestId);
+    }
 }

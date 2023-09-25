@@ -38,7 +38,7 @@ public class AdminServiceImpl implements AdminService {
 
             return new ResponseEntity<>("request Success.", HttpStatus.OK);
         } else { // user is empty
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("user is not found.",HttpStatus.BAD_REQUEST);
         }
     }
 

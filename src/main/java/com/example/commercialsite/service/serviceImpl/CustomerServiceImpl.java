@@ -111,24 +111,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-
-
-//@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     @Override
     public ResponseEntity<StandardResponse> HelpRequestFromCustomer(HelpDto helpDto) {
+        //get user data from customer id
         Users users = userRepo.findByUserId(helpDto.getCustomerId());
-        if(users != null){
-//        if(userRepo.existsByUserIdEquals(helpDto.getCustomerId())){
+        if(users != null){ //have a user for relevant id
+            //convert the help dto to helpSupport entity
             HelpSupport helpSupport = fromDTO.setHelpRequestFromCustomer(helpDto);
+            //save the data in Help_Support table
             helpSupportRepo.save(helpSupport);
 
             return new ResponseEntity<>(
                     new StandardResponse(200,"saved Request.",helpSupport),
                     HttpStatus.CREATED
             );
-        }else{
+        }else{ // doesn't have  a user from relevant id
             return new ResponseEntity<>(
-                    new StandardResponse(404,"user is not found",null ),
+                    new StandardResponse(400,"user is not found",null ),
                     HttpStatus.BAD_REQUEST);
         }
     }
