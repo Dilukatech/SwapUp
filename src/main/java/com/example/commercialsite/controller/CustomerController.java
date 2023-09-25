@@ -44,7 +44,7 @@ public class CustomerController {
         return result;
     }
 
-    @PostMapping("/AllRequestTokenFromCustomer")
+    @PostMapping("/AllRequestToken")
     public ResponseEntity<StandardResponse> AllRequestTokenFromCustomer(@RequestBody UsersDTO usersDTO) {
         logger.info("Logging begins... AllRequestTokenFromCustomer");   // log INFO-level message
         ResponseEntity<StandardResponse> result;

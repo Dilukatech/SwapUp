@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Getter
+@Transactional
 @Entity
 @Table(name = "Item")
 public class Item {

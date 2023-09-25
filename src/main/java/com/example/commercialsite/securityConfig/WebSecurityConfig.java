@@ -43,7 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/user/register-staff","/api/v1/admin/{**}/on-hold","/api/v1/admin/{**}/remove-hold","/api/v1/admin/hold-user","/api/v1/admin/get-all-users",
                         "/api/v1/customer/request-token","/api/v1/customer/saveRequestToken",
                         "/api/v1/quality-checker/accept-request-token",
-                        "/api/v1/customer/RequestTokenFromCustomer","/api/v1/customer/AllRequestTokenFromCustomer","/api/v1/user/register-customer",
+                        "/api/v1/customer/RequestTokenFromCustomer","/api/v1/customer/AllRequestToken","/api/v1/user/register-customer",
                         "/api/v1/quality-checker/reject-request-token").permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()

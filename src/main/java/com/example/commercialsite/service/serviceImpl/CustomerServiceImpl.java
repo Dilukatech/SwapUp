@@ -86,7 +86,7 @@ public class CustomerServiceImpl implements CustomerService {
                 list.forEach(requestToken -> dtoList.add(toDTO.getRequestTokenResponseDto(requestToken)));
 
                 return new ResponseEntity<>(
-                        new StandardResponse(201,"user is not active of verified", dtoList ),
+                        new StandardResponse(201,"all requestToken from the user", dtoList ),
                         HttpStatus.OK
                 );
 

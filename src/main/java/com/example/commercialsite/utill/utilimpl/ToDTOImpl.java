@@ -36,7 +36,7 @@ public class ToDTOImpl implements ToDTO {
 
         dto.setRequestTokenId(requestToken.getRequestTokenId());
         dto.setCustomerId(requestToken.getCustomerId());
-        dto.setItemId(requestToken.getItemId());
+//        dto.setItemId(requestToken.getItemId());
         dto.setStatus(requestToken.getStatus());
         dto.setItemDescription(requestToken.getItemDescription());
         dto.setItemImage(requestToken.getItemImage());
