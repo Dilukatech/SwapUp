@@ -29,11 +29,7 @@ public class UserController {
         return userService.registerUser(userRegisterRequestDTO);
     }
 
-    @PostMapping(path = "/register-staff")
-//    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
-        return userService.registerUser(userRegisterRequestDTO);
-    }
+
 
     @PostMapping({"/login"})
     public ResponseEntity<AuthResponse> createJwtTokenAndLogin(@RequestBody LoginRequest loginRequest) throws Exception {

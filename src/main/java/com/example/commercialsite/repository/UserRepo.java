@@ -14,6 +14,8 @@ public interface UserRepo extends JpaRepository<Users,Long> {
 
     Users findByUserId(Long customerId);
 
+    boolean existsByUserIdEquals(Long customerId);
+
     //Users findByEmailEquals(String email);
     // trying to fuse Usermapper with the UserRepo
     //List<UsersDTO> entityListToUsersDTODtoList(List<Users> users); // previous method // findAll() might give the supposed result

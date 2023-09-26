@@ -1,15 +1,24 @@
 package com.example.commercialsite.utill.utilimpl;
 
+
 import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.entity.Item;
+
+import com.example.commercialsite.dto.request.CheckHelpDto;
+import com.example.commercialsite.dto.request.HelpDto;
+import com.example.commercialsite.entity.HelpSupport;
+
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.utill.FromDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
@@ -48,6 +57,7 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
 
 
 
+
     @Override
     public Item getItem(RequestToken requestToken, AcceptRequestDto acceptRequestDto) {
         Item item = new Item();
@@ -62,4 +72,28 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
 
         return item;
     }
+
+    @Override
+    public HelpSupport setHelpRequestFromCustomer(HelpDto helpDto) {
+      HelpSupport entity = new HelpSupport();
+
+      entity.setCustomerId(helpDto.getCustomerId());
+      entity.setSubject(helpDto.getSubject());
+      entity.setMessage(helpDto.getMessage());
+      entity.setReceivedTime(LocalDateTime.now());
+      entity.setStatus(false);
+
+      return entity;
+    }
+
+    @Override
+    public HelpSupport checkHelpRequest(HelpSupport helpSupport, CheckHelpDto checkHelpDto) {
+        helpSupport.setHelpAssistantId(checkHelpDto.getHelpAssistantId());
+        helpSupport.setReply(checkHelpDto.getReply());
+        helpSupport.setStatus(true);
+
+        return helpSupport;
+    }
+
+
 }

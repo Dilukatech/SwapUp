@@ -1,5 +1,6 @@
 package com.example.commercialsite.controller;
 
+import com.example.commercialsite.dto.request.HelpDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
 import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.service.CustomerService;
@@ -7,10 +8,7 @@ import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -60,6 +58,24 @@ public class CustomerController {
         }
 
         logger.info("Done... AllRequestTokenFromCustomer");
+        return result;
+    }
+
+    @PostMapping("/help-request")
+    public ResponseEntity<StandardResponse> HelpRequestFromCustomer(@RequestBody HelpDto helpDto){
+        logger.info("Logging begins... HelpRequestFromCustomer");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
+        try{
+            result = customerService.HelpRequestFromCustomer(helpDto);
+        }catch (Exception ex){
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<>(
+                    new StandardResponse(500,"internal server error in getting All Request Token From Customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+        logger.info("Done... HelpRequestFromCustomer");
         return result;
     }
 }
