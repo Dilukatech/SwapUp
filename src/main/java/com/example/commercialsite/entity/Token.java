@@ -35,4 +35,7 @@ public class Token {
     //@ManyToOne(mappedBy = "requestToken", cascade = CascadeType.ALL)
     //private Item item;
 
+    @OneToOne(mappedBy = "token", cascade = CascadeType.ALL)
+    private RequestToken requestToken;
+
 }
