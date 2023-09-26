@@ -1,10 +1,13 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.request.HelpDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
 import com.example.commercialsite.dto.response.RequestTokenResponseDto;
 import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
+import com.example.commercialsite.repository.HelpSupportRepo;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.repository.UserRepo;
 import com.example.commercialsite.service.CustomerService;
@@ -33,6 +36,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private FromDTO fromDTO;
+
+    @Autowired
+    private HelpSupportRepo helpSupportRepo;
 
     @Override
     public ResponseEntity<StandardResponse> CreateRequestToken(RequestTokenRequestDto requestTokenRequestDto) {
@@ -102,6 +108,27 @@ public class CustomerServiceImpl implements CustomerService {
                     new StandardResponse(201,"user is not found",null ),
                     HttpStatus.BAD_REQUEST
             );
+        }
+    }
+
+    @Override
+    public ResponseEntity<StandardResponse> HelpRequestFromCustomer(HelpDto helpDto) {
+        //get user data from customer id
+        Users users = userRepo.findByUserId(helpDto.getCustomerId());
+        if(users != null){ //have a user for relevant id
+            //convert the help dto to helpSupport entity
+            HelpSupport helpSupport = fromDTO.setHelpRequestFromCustomer(helpDto);
+            //save the data in Help_Support table
+            helpSupportRepo.save(helpSupport);
+
+            return new ResponseEntity<>(
+                    new StandardResponse(200,"saved Request.",helpSupport),
+                    HttpStatus.CREATED
+            );
+        }else{ // doesn't have  a user from relevant id
+            return new ResponseEntity<>(
+                    new StandardResponse(400,"user is not found",null ),
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
