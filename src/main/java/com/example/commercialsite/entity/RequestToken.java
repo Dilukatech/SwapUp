@@ -53,4 +53,20 @@ public class RequestToken {
     private Token token;
 
 
+    @Override
+    public String toString() {
+        return "RequestToken{" +
+                "requestTokenId=" + requestTokenId +
+                ", customerId=" + customerId +
+                ", qualityCheckerId=" + qualityCheckerId +
+                ", status=" + status +
+                ", itemDescription='" + itemDescription + '\'' +
+                ", itemImage='" + itemImage + '\'' +
+                ", requestDateTime=" + requestDateTime +
+                '}';
+    }
+
+
+
+
 }

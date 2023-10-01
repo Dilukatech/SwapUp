@@ -22,6 +22,6 @@ public class AcceptRequestDto {
     private String type;
     private int price;
     private String size;
-    private Text description;
+    private String description;
 
 }
