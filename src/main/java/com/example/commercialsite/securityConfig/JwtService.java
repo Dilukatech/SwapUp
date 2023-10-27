@@ -3,7 +3,7 @@ package com.example.commercialsite.securityConfig;
 import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.response.AuthResponse;
 import com.example.commercialsite.entity.Users;
-import com.example.commercialsite.repository.UserRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService implements UserDetailsService {
     @Autowired
-    private UserRepo userRepo;
+    private UsersRepo usersRepo;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -28,7 +28,7 @@ public class JwtService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = userRepo.findByEmail(username)
+        Users users = usersRepo.findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
         return org.springframework.security.core.userdetails.User
@@ -43,7 +43,7 @@ public class JwtService implements UserDetailsService {
         String userName = loginRequest.getUserName();
         String userPassword = loginRequest.getUserPassword();
 
-        Users users = userRepo.findByEmail(userName).orElse(null);
+        Users users = usersRepo.findByEmail(userName).orElse(null);
         if (users == null || !users.isActiveStatus()) {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         } else {
