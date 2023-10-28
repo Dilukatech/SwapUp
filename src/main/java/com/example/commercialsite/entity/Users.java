@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,6 +55,9 @@ public class Users {
 
     @Column(name = "verified")
     private boolean verified;
+
+    @OneToMany(mappedBy = "users")
+    private List<Payments> payments;
 
 }
 
