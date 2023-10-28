@@ -1,12 +1,10 @@
 package com.example.commercialsite.service.serviceImpl;
 
-import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.UsersDTO;
-import com.example.commercialsite.entity.HoldUser;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.HoldUserRepo;
-import com.example.commercialsite.repository.UserRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.service.UserService;
 import com.example.commercialsite.utill.FromDTO;
 import com.example.commercialsite.utill.ToDTO;
@@ -20,9 +18,7 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.persistence.Column;
 import java.io.UnsupportedEncodingException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +26,7 @@ import java.util.Optional;
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
-    private UserRepo userRepo;
+    private UsersRepo usersRepo;
 
     @Autowired
     private JavaMailSender mailSender;
@@ -48,19 +44,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> registerUser(UserRegisterRequestDTO userRegisterRequestDTO) throws MessagingException, UnsupportedEncodingException {
         /* if user does not exist */
-        if (!userRepo.existsByEmailEquals(userRegisterRequestDTO.getEmail())) {
+        if (!usersRepo.existsByEmailEquals(userRegisterRequestDTO.getEmail())) {
             // user does not exist      // removed previous redundant validations
             Users users = fromDTO.getUsers(userRegisterRequestDTO); // take userRegister request and spit a users object
 
             String randomCode = RandomString.make(64); // random code for verification
             users.setVerificationCode(randomCode);
 
-            userRepo.save(users);
+            usersRepo.save(users);
 
             String siteURL="http://localhost:3000";
             sendVerificationEmail(users, siteURL);
 
-            return new ResponseEntity<>("please check your mail for verify your account",HttpStatus.OK);
+            return new ResponseEntity<>("please check your mail for verify your account --> " +
+                    users.getVerificationCode(),HttpStatus.OK);
 
         } else { // user does exist
             return new ResponseEntity<>("this user name already exist",HttpStatus.CONFLICT);
@@ -97,14 +94,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<?>  verifyCustomer(String code) {
-        Users users =userRepo.findByVerificationCodeEquals(code);
-        if(users == null || users.isVerified()){
-            return new ResponseEntity<>("InValid Request",HttpStatus.BAD_REQUEST);
-        }else{
+    public ResponseEntity<?> verifyUsers(String code) {
+        Users users = usersRepo.findByVerificationCodeEquals(code);
+        if(users == null || users.isVerified()){ // no such user by that code or the user is already verified
+            return new ResponseEntity<>("InValid Request \nuser is already verified",HttpStatus.BAD_REQUEST);
+        }else{ // user is not null and user is not verified
             users.setVerificationCode(null);
             users.setVerified(true);
-            userRepo.save(users);
+            usersRepo.save(users);
             return new ResponseEntity<>("Account Verified",HttpStatus.OK);
 
         }
@@ -112,12 +109,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<Users> getUserById(Long userId) {
-        return userRepo.findById(userId);
+        return usersRepo.findById(userId);
     }
 
     @Override
     public ResponseEntity<List<UsersDTO>> getAllUsers() {
-        List<Users> users = userRepo.findAll();
+        List<Users> users = usersRepo.findAll();
         List<UsersDTO> usersDTOList = new ArrayList<>();  // an empty list to store all userDTO objects
         if (!users.isEmpty()) { //users list is not empty
             for (Users user : users) {

@@ -1,9 +1,6 @@
 package com.example.commercialsite.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -11,8 +8,10 @@ import javax.transaction.Transactional;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+//@Data     // gives a circular reference error // moving toString annotation
+@ToString
 @Getter
+@Setter
 @Transactional
 @Entity
 @Table(name = "Item")
@@ -44,22 +43,9 @@ public class Item {
     @Column(name = "size", nullable = false)
     private String size;
 
+    @ToString.Exclude // to fix circular reference problem
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemId=" + itemId +
-                ", color='" + color + '\'' +
-                ", imageURL='" + imageURL + '\'' +
-                ", gender='" + gender + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", availableStatus=" + availableStatus +
-                ", size='" + size + '\'' +
-                '}';
-    }
 
 
 

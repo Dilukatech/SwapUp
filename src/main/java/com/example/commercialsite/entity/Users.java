@@ -1,18 +1,20 @@
 package com.example.commercialsite.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+//@Data     // gives a circular reference error // moving toString annotation
+@ToString
+@Getter
+@Setter
+@Transactional
 @Entity(name = "Users") // hibernate annotations
 @Table(name = "users")
-@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,8 +58,7 @@ public class Users {
     @Column(name = "verified")
     private boolean verified;
 
-    @OneToMany(mappedBy = "users")
-    private List<Payments> payments;
+
 
 }
 

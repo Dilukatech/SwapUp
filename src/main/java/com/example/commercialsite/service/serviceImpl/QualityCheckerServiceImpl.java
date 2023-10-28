@@ -9,6 +9,7 @@ import com.example.commercialsite.entity.Token;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.repository.TokenRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.service.QualityCheckerService;
 import com.example.commercialsite.service.TokenService;
 import com.example.commercialsite.utill.FromDTO;
@@ -38,6 +39,11 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
     @Autowired
     private FromDTO fromDTO;
 
+    @Autowired
+    private UsersRepo usersRepo;
+
+    private final int priceFactor = 1000; // factor by which the price is multiplied
+
     private static final Logger logger = Logger.getLogger(CustomerController.class.getName()); // logger is the recommended way to handel exceptions
 
 
@@ -45,15 +51,27 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
         logger.info("Logging begins... AcceptRequestToken");   // log INFO-level message
         ResponseEntity<StandardResponse> result;
 
+        // setting price factor
+
         try {
              if( requestTokenRepo.existsById( acceptRequestDto.getRequestTokenId() ) ){ // check if the token_request_id is present(valid)
                  // get requestToken object by id
                  RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(acceptRequestDto.getRequestTokenId());
+
+                 // check if the requestToken is already processed ( accepted/rejected )
+                 if ( requestToken.getStatus() == 1 || // accepted
+                        requestToken.getStatus() == -1 // rejected
+                    ){
+                     return new ResponseEntity<>(
+                             new StandardResponse(208,"request is already processed.", null),
+                             HttpStatus.CREATED);
+                 }
+
                  //updating the requestToken object with arrived details
-                 requestToken.setQualityCheckerId(acceptRequestDto.getQualityCheckerId());
+                 requestToken.setQualityCheckerId(usersRepo.getReferenceById(acceptRequestDto.getQualityCheckerId()));
                  requestToken.setStatus(1);
 
-                 // creating a item object and adding arrived details
+                 // creating na item object and adding arrived details
                  Item item = fromDTO.getItem(requestToken, acceptRequestDto); // map data
 
                  // generating token
@@ -94,16 +112,31 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
         ResponseEntity<StandardResponse> result;
 
        try{
-           if(requestTokenRepo.existsById(rejectRequestDto.getRequestTokenId())){
-                //RequestToken requestToken = new RequestToken();
+           if(requestTokenRepo.existsById(rejectRequestDto.getRequestTokenId())){ // check if the token_request_id is present(valid)
+               // get requestToken object by id
                RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId( rejectRequestDto.getRequestTokenId());
-                requestToken.setQualityCheckerId(rejectRequestDto.getQualityCheckerId());
-                requestToken.setStatus(-1);
 
-                requestTokenRepo.save(requestToken);
+               // check if the requestToken is already processed ( accepted/rejected )
+               if ( requestToken.getStatus() == 1 || // accepted
+                       requestToken.getStatus() == -1 // rejected
+               ){
+                   return new ResponseEntity<>(
+                           new StandardResponse(208,"request is already processed.", null),
+                           HttpStatus.CREATED);
+               }
+
+               //updating the requestToken object with arrived details
+               requestToken.setQualityCheckerId(usersRepo.getReferenceById(rejectRequestDto.getQualityCheckerId()));
+               requestToken.setStatus(-1); // rejected
+
+               // setting package to return-to-customer
+
+
+               // writing to the database
+               requestTokenRepo.save(requestToken);
 
                 result = new ResponseEntity<>(
-                       new StandardResponse(201,"Token Request Successfully Rejected.", null),
+                       new StandardResponse(201,"Token Request Rejected Successfully.", null),
                        HttpStatus.CREATED);
              }else {
                 result = new ResponseEntity<>(

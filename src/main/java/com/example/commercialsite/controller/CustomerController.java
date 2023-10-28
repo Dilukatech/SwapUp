@@ -54,7 +54,7 @@ public class CustomerController {
         ResponseEntity<StandardResponse> result;
 
         try {
-            result =  customerService.AllRequestTokenFromCustomer(usersDTO);
+            result = customerService.AllRequestTokenFromCustomer(usersDTO);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
             return new ResponseEntity<>(

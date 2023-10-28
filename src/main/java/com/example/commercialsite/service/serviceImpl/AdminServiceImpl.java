@@ -4,7 +4,7 @@ import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.entity.HoldUser;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.HoldUserRepo;
-import com.example.commercialsite.repository.UserRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,18 +16,18 @@ import java.time.LocalDateTime;
 @Service
 public class AdminServiceImpl implements AdminService {
     @Autowired
-    private UserRepo userRepo;
+    private UsersRepo usersRepo;
 
     @Autowired
     private HoldUserRepo holdUserRepo;
 
     @Override
     public ResponseEntity<String> holdAccount(HoldDto holdDto) {
-        Users users = userRepo.findByUserId(holdDto.getCustomerId());
+        Users users = usersRepo.findByUserId(holdDto.getCustomerId());
 
         if (users != null) { //customer is not empty
             users.setActiveStatus(holdDto.getAction());  //set the action of customer as hold or remove hold
-            userRepo.save(users);
+            usersRepo.save(users);
 
             HoldUser holdUser = new HoldUser();
             holdUser.setAdminId(holdDto.getAdminId());
