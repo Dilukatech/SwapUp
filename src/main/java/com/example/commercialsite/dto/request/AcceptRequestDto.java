@@ -2,10 +2,9 @@ package com.example.commercialsite.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.w3c.dom.Text;
 
-@NoArgsConstructor
+//@NoArgsConstructor
 @AllArgsConstructor
 @Data
 public class AcceptRequestDto {
@@ -22,6 +21,8 @@ public class AcceptRequestDto {
     private String type;
     private int price;
     private String size;
-    private Text description;
+    private String description;
+
+    //private final int priceFactor;
 
 }

@@ -6,7 +6,7 @@ import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.FavoriteRepo;
 import com.example.commercialsite.repository.ItemRepo;
-import com.example.commercialsite.repository.UserRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.service.FavoriteService;
 import com.example.commercialsite.service.UserService;
 import com.example.commercialsite.utill.ItemMapper;
@@ -27,7 +27,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private FavoriteRepo favoriteRepo;
 
     @Autowired
-    private UserRepo userRepo;
+    private UsersRepo usersRepo;
 
     @Autowired
     private ItemRepo itemRepo;
@@ -40,7 +40,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public void addToFavorites(Long userId, Long itemId) {
-        Users users = userRepo.findById(userId).orElse(null);
+        Users users = usersRepo.findById(userId).orElse(null);
         Item item = itemRepo.findById(itemId).orElse(null);
 
         if (users == null) {
@@ -79,7 +79,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public void deleteFromFavorites(Long userId, Long itemId) {
 
-        Users users = userRepo.findById(userId).orElse(null);
+        Users users = usersRepo.findById(userId).orElse(null);
         Item item = itemRepo.findById(itemId).orElse(null);
 
         if (users == null) {
