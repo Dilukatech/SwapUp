@@ -34,4 +34,6 @@ public class HelpAssistant {
     return helpAssistantService.GetAllHelpRequests();
   }
 
+
+
 }

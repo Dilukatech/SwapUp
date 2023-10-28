@@ -37,7 +37,7 @@ public class RequestToken {
     @Column(name = "item_Description")
     private String itemDescription;
 
-    @Column(name = "item_image")
+    @Column(name = "item_image",columnDefinition = "TEXT")
     private String itemImage;
 
     @Column(name = "request_date_time")

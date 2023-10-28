@@ -176,4 +176,30 @@ public class CustomService {
                     .build();
         }
     }
+
+    public ItemDetailResponse getItemDetails(Long itemId) {
+        if(itemId==null){
+            return ItemDetailResponse
+                    .builder()
+                    .message("All fields are required")
+                    .build();
+        }
+        Optional<Item> existingItem=itemRepo.findByItemId(itemId);
+        if(existingItem.isEmpty()){
+            return ItemDetailResponse
+                    .builder()
+                    .message("Item not found")
+                    .build();
+        }
+        Item item=existingItem.get();
+        RequestToken requestToken=item.getRequestToken();
+        Users existingUser=userRepo.findByUserId(requestToken.getCustomerId());
+        return ItemDetailResponse
+                .builder()
+                .message("user found")
+                .address(existingUser.getAddress())
+                .telephone(existingUser.getTelephone())
+                .build();
+
+    }
 }

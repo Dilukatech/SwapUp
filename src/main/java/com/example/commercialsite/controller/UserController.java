@@ -5,6 +5,7 @@ import com.example.commercialsite.dto.request.LoginRequest;
 import com.example.commercialsite.dto.request.ProfilePictureRequest;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.AuthResponse;
+import com.example.commercialsite.dto.response.ItemDetailResponse;
 import com.example.commercialsite.dto.response.MessageResponse;
 import com.example.commercialsite.securityConfig.JwtService;
 import com.example.commercialsite.service.UserService;
@@ -72,7 +73,7 @@ public class UserController {
     @PutMapping(path="/update-profile-pic/{id}")
     public ResponseEntity<?> updateProfilePic(@PathVariable Long id, @RequestBody ProfilePictureRequest profilePictureRequest)throws Exception{
         MessageResponse response=customService.updateProfilePic(id,profilePictureRequest);
-        System.out.println("RUNNING");
+
         if(Objects.equals(response.getMessage(), "User not found")){
             return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
         }
@@ -87,6 +88,23 @@ public class UserController {
         response.setMessage("Server error");
         return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
 
+    }
+
+    @GetMapping("/item-detail/{itemId}")
+    public ResponseEntity<?> getItemDetails(@PathVariable Long itemId){
+        ItemDetailResponse response=customService.getItemDetails(itemId);
+
+        if(Objects.equals(response.getMessage(), "All fields are required")){
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+        if(Objects.equals(response.getMessage(), "Item not found")){
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+        if(Objects.equals(response.getMessage(), "user found")){
+            return new ResponseEntity<>(response,HttpStatus.OK);
+        }
+        response.setMessage("Server error");
+        return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
