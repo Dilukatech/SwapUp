@@ -12,37 +12,59 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/api/v1/quality-checker")
 public class QualityCheckerController {
+
+    private static final Logger logger = Logger.getLogger(CustomerController.class.getName()); // logger is the recommended way to handel exceptions
+
+
     @Autowired
     private QualityCheckerService qualityCheckerService;
 
 
     @PostMapping("/accept-request-token")
     public ResponseEntity<StandardResponse> acceptRequestToken(@RequestBody AcceptRequestDto acceptRequestDto) {
+        logger.info("Logging begins... acceptRequestToken");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
         try {
-            return qualityCheckerService.AcceptRequestToken(acceptRequestDto);
-        } catch (Exception e) {
-            e.printStackTrace();
+            result = qualityCheckerService.AcceptRequestToken(acceptRequestDto);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
             return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(500,"internal server error while processing the Accept Request Token."+ e.getMessage(),null),
+                    new StandardResponse(500,"internal server error while processing the Accept Request Token."+ ex.getMessage(),null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        logger.info("Done... acceptRequestToken");
+        return result;
     }
 
 
     @PostMapping("/reject-request-token")
     public ResponseEntity<StandardResponse> rejectRequestToken(@RequestBody RejectRequestDto rejectRequestDto) {
-        try {
-            return qualityCheckerService.rejectRequestToken(rejectRequestDto);
+        logger.info("Logging begins... rejectRequestToken");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
 
-        } catch (Exception e) {
-            e.printStackTrace();
+        try {
+            result = qualityCheckerService.rejectRequestToken(rejectRequestDto);
+
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
             return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(500,"Error while processing the Accept Request Token: " + e.getMessage(),null),
+                    new StandardResponse(500,"Error while processing the Accept Request Token: " + ex.getMessage(),null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
+
+        logger.info("Done... rejectRequestToken");
+        return result;
     }
+
+
+
 }
