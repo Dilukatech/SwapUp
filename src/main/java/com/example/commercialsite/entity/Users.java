@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -57,15 +58,7 @@ public class Users {
     @Column(name = "verified")
     private boolean verified;
 
-    @ToString.Exclude // to fix circular reference problem
-    @OneToOne(cascade = CascadeType.ALL)
-    private Token token;
 
-//    @OneToMany(mappedBy = "customer_id")
-//    private List<RequestToken> customerRequestTokens; // bidirectional relationship with RequestToken
-//
-//    @OneToMany(mappedBy = "quality_checker_id")
-//    private List<RequestToken> qualityCheckerRequestTokens; // bidirectional relationship RequestToken
 
 }
 
