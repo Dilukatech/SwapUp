@@ -47,20 +47,6 @@ public class Item {
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
 
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemId=" + itemId +
-                ", color='" + color + '\'' +
-                ", imageURL='" + imageURL + '\'' +
-                ", gender='" + gender + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", availableStatus=" + availableStatus +
-                ", size='" + size + '\'' +
-                '}';
-    }
-
 
 
 }
