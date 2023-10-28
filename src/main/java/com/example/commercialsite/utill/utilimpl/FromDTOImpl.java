@@ -1,10 +1,15 @@
 package com.example.commercialsite.utill.utilimpl;
 
-import com.example.commercialsite.dto.request.CheckHelpDto;
-import com.example.commercialsite.dto.request.HelpDto;
+
+import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.entity.Item;
+
+import com.example.commercialsite.dto.request.CheckHelpDto;
+import com.example.commercialsite.dto.request.HelpDto;
 import com.example.commercialsite.entity.HelpSupport;
+
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.utill.FromDTO;
@@ -50,6 +55,24 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
         return entity;
     }
 
+
+
+
+    @Override
+    public Item getItem(RequestToken requestToken, AcceptRequestDto acceptRequestDto) {
+        Item item = new Item();
+
+        item.setColor(acceptRequestDto.getColor());
+        item.setImageURL(acceptRequestDto.getImageURL());
+        item.setGender(acceptRequestDto.getGender());
+        item.setType(acceptRequestDto.getType());
+        item.setPrice(acceptRequestDto.getPrice());
+        item.setAvailableStatus(true);
+        item.setSize(acceptRequestDto.getSize());
+
+        return item;
+    }
+
     @Override
     public HelpSupport setHelpRequestFromCustomer(HelpDto helpDto) {
       HelpSupport entity = new HelpSupport();
@@ -71,5 +94,6 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
 
         return helpSupport;
     }
+
 
 }

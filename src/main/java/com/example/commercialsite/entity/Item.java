@@ -6,12 +6,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Getter
+@Transactional
 @Entity
 @Table(name = "Item")
 public class Item {
@@ -44,5 +46,21 @@ public class Item {
 
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "itemId=" + itemId +
+                ", color='" + color + '\'' +
+                ", imageURL='" + imageURL + '\'' +
+                ", gender='" + gender + '\'' +
+                ", type='" + type + '\'' +
+                ", price=" + price +
+                ", availableStatus=" + availableStatus +
+                ", size='" + size + '\'' +
+                '}';
+    }
+
+
 
 }
