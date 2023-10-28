@@ -12,6 +12,7 @@ import com.example.commercialsite.entity.HelpSupport;
 
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.utill.FromDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,11 +23,16 @@ import java.util.Optional;
 
 @Service
 class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
+
     @Autowired
     private PasswordEncoder passwordEncoder;
     public String getEncodedPassword(String passWord){
         return passwordEncoder.encode(passWord);
     }
+
+    @Autowired
+    private UsersRepo usersRepo;
+
     @Override
     public Users getUsers(UserRegisterRequestDTO dto) {
         Users entity = new Users();
@@ -48,7 +54,10 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
     public RequestToken getRequestToken(RequestTokenRequestDto dto) {
         RequestToken entity = new RequestToken();
 
-        entity.setCustomerId(dto.getCustomerId());
+//        entity.setCustomerId(dto.getCustomerId()); // previous code
+        // cestCustomer accept a Users object  // possibility --> users table being also updated
+        // getting users object by id
+        entity.setCustomerId(usersRepo.getReferenceById(dto.getCustomerId()));
         entity.setItemImage(dto.getItemImage());
         entity.setItemDescription(dto.getItemDescription());
 

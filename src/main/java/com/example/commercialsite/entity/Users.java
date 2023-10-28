@@ -1,17 +1,19 @@
 package com.example.commercialsite.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
+//@Data     // gives a circular reference error // moving toString annotation
+@ToString
+@Getter
+@Setter
+@Transactional
 @Entity(name = "Users") // hibernate annotations
 @Table(name = "users")
-@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,6 +56,16 @@ public class Users {
 
     @Column(name = "verified")
     private boolean verified;
+
+    @ToString.Exclude // to fix circular reference problem
+    @OneToOne(cascade = CascadeType.ALL)
+    private Token token;
+
+//    @OneToMany(mappedBy = "customer_id")
+//    private List<RequestToken> customerRequestTokens; // bidirectional relationship with RequestToken
+//
+//    @OneToMany(mappedBy = "quality_checker_id")
+//    private List<RequestToken> qualityCheckerRequestTokens; // bidirectional relationship RequestToken
 
 }
 

@@ -1,9 +1,6 @@
 package com.example.commercialsite.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -11,8 +8,10 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+//@Data     // gives a circular reference error // moving toString annotation
+@ToString
 @Getter
+@Setter
 @Transactional
 @Entity(name = "RequestToken")
 @Table(name = "request_token")
@@ -22,14 +21,13 @@ public class RequestToken {
     @Column(name = "request_token_id")
     private Long requestTokenId;
 
-    @Column(name = "customer_id")
-    private Long customerId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Users customerId;
 
-//    @Column(name = "item_id")
-//    private Long itemId;
-
-    @Column(name = "quality_checker_id")
-    private Long qualityCheckerId;
+    @ManyToOne
+    @JoinColumn(name = "quality_checker_id")
+    private Users qualityCheckerId;
 
     @Column(name = "status")
     private int status;
@@ -43,29 +41,17 @@ public class RequestToken {
     @Column(name = "request_date_time")
     private LocalDateTime requestDateTime;
 
+    // data jpa relationship
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "item_id")
+    @ToString.Exclude // to fix circular reference problem
+    private Item item;
 
     // data jpa relationship
     @OneToOne(cascade = CascadeType.ALL)
-    //@JoinColumn(name = "request_token_item_id", referencedColumnName = "item_id")
-    private Item item;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "token_id")
+    @ToString.Exclude // to fix circular reference problem
     private Token token;
-
-
-    @Override
-    public String toString() {
-        return "RequestToken{" +
-                "requestTokenId=" + requestTokenId +
-                ", customerId=" + customerId +
-                ", qualityCheckerId=" + qualityCheckerId +
-                ", status=" + status +
-                ", itemDescription='" + itemDescription + '\'' +
-                ", itemImage='" + itemImage + '\'' +
-                ", requestDateTime=" + requestDateTime +
-                '}';
-    }
-
 
 
 
