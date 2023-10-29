@@ -13,8 +13,8 @@ import javax.transaction.Transactional;
 @Getter
 @Setter
 @Transactional
-@Entity
-@Table(name = "Item")
+@Entity(name = "Item") // hibernate annotations
+@Table(name = "item")
 public class Item {
 
     @Id
