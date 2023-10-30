@@ -2,8 +2,10 @@ package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.dto.response.ItemRemainingResponseDto;
 import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.service.AdminService;
+import com.example.commercialsite.service.ItemService;
 import com.example.commercialsite.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,9 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
+    @Autowired
+    private ItemService itemService;
+
     @PostMapping(path = "/register-staff")
 //    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> registerStaff(@RequestBody UserRegisterRequestDTO userRegisterRequestDTO) throws Exception {
@@ -34,5 +39,15 @@ public class AdminController {
     public ResponseEntity<List<UsersDTO>> getAllUsers(){
         return userService.getAllUsers();
     }
+
+    @GetMapping(path = "/get-all-item-in-remaining-store/{status}")
+    public List<ItemRemainingResponseDto> getAllRemainingItemByAvailableStatus(@PathVariable(value = "status") boolean availableStatus){
+        List<ItemRemainingResponseDto> itemRemainingResponseDtos = itemService.getAllRemainingItemByAvailableStatus(availableStatus);
+        return itemRemainingResponseDtos;
+
+    }
+
+
+
 
 }

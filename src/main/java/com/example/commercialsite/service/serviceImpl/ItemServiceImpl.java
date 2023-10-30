@@ -1,6 +1,7 @@
 package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.dto.request.ItemSaveRequestDTO;
+import com.example.commercialsite.dto.response.ItemRemainingResponseDto;
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.service.ItemService;
@@ -22,6 +23,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Autowired
     private ItemMapper itemMapper;
+
+    @Override
+    public List<ItemRemainingResponseDto> getAllRemainingItemByAvailableStatus(boolean availableStatus) {
+        List<Item> itemList = itemRepo.findAllByAvailableStatus(availableStatus);
+        List<ItemRemainingResponseDto> itemRemainingResponseDtoList = itemMapper.entityListToDtoList(itemList);
+        return itemRemainingResponseDtoList;
+    }
 
 //    @Override
 //    public boolean saveItem(ItemSaveRequestDTO itemSaveRequestDTO) {
