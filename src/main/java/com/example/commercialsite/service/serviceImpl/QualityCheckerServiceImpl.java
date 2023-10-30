@@ -1,8 +1,10 @@
 package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.controller.CustomerController;
+import com.example.commercialsite.dto.RequestTokenDto;
 import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RejectRequestDto;
+import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.RequestToken;
@@ -12,11 +14,16 @@ import com.example.commercialsite.service.QualityCheckerService;
 import com.example.commercialsite.service.TokenService;
 import com.example.commercialsite.utill.FromDTO;
 import com.example.commercialsite.utill.StandardResponse;
+import com.example.commercialsite.utill.ToDTO;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,10 +45,16 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
     private FromDTO fromDTO;
 
     @Autowired
+    private ToDTO toDTO;
+
+    @Autowired
     private UsersRepo usersRepo;
 
     @Autowired
     private InventoryManagerTokenRequestRepo inv_mng_TokenRequestRepo;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     private final int priceFactor = 1000; // factor by which the price is multiplied
 
@@ -209,5 +222,25 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
         }
         return result;
     }
+
+//    @Override
+//    public ResponseEntity<StandardResponse> getAllRequestToken() {
+//        List<RequestToken> requestTokens = requestTokenRepo.findAll(); //get all request token
+//        System.out.println(requestTokens);
+//       // List<RequestTokenDto> dtoList = new ArrayList<>(); // create a empty dto list
+//        if(!requestTokens.isEmpty()){ //list are not empty
+//            List<RequestTokenDto> dtoList = modelMapper.map(requestTokens,new TypeToken<List<RequestTokenDto>>(){}.getType());
+////            for(RequestToken requestToken: requestTokens){
+////                dtoList.add(toDTO.getAllRequestToken(requestToken));
+//  //          }
+//            return new ResponseEntity<>(
+//                    new StandardResponse(200,"get all request token successfully.",dtoList ),
+//                    HttpStatus.OK);
+//        }else{
+//            return new ResponseEntity<>( //list are empty
+//                    new StandardResponse(400,"request token list is Empty.",null ),
+//                    HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
 }

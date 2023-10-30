@@ -1,11 +1,11 @@
 package com.example.commercialsite.utill.utilimpl;
 
+import com.example.commercialsite.dto.RequestTokenDto;
 import com.example.commercialsite.dto.response.HelpRequestDto;
+import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
 import com.example.commercialsite.dto.response.RequestTokenResponseDto;
 import com.example.commercialsite.dto.response.UsersDTO;
-import com.example.commercialsite.entity.HelpSupport;
-import com.example.commercialsite.entity.RequestToken;
-import com.example.commercialsite.entity.Users;
+import com.example.commercialsite.entity.*;
 import com.example.commercialsite.utill.ToDTO;
 import org.springframework.stereotype.Service;
 
@@ -66,4 +66,34 @@ public class ToDTOImpl implements ToDTO {
 
         return dto;
     }
+
+    @Override
+    public Inv_Mng_TokenRequestDto getAllUnprocessedSwapItems(InventoryManagerTokenRequest inventoryManagerTokenRequest) {
+        Inv_Mng_TokenRequestDto dto = new Inv_Mng_TokenRequestDto();
+        dto.setInventoryManagerTokenRequestId(inventoryManagerTokenRequest.getInventoryManagerTokenRequestId());
+        dto.setInventoryManagerId(inventoryManagerTokenRequest.getInventoryManagerId());
+        dto.setRequestTokenId(inventoryManagerTokenRequest.getRequestTokenId());
+        dto.setShippedOrArrivedTime(inventoryManagerTokenRequest.getShippedOrArrivedTime());
+        dto.setShipmentStatus(inventoryManagerTokenRequest.getShipmentStatus());
+
+        return dto;
+    }
+
+
+    //quality checker get all request tokens
+//    @Override
+//    public RequestTokenDto getAllRequestToken(RequestToken requestToken) {
+//        RequestTokenDto dto = new RequestTokenDto();
+//        dto.setRequestTokenId(requestToken.getRequestTokenId());
+//        dto.setCustomerId(requestToken.getCustomerId());
+//        dto.setQualityCheckerId(requestToken.getQualityCheckerId());
+//        dto.setStatus(requestToken.getStatus());
+//        dto.setShippingApproval(requestToken.getShippingApproval());
+//        dto.setItemDescription(requestToken.getItemDescription());
+//        dto.setItemImage(requestToken.getItemImage());
+//        dto.setRequestDateTime(requestToken.getRequestDateTime());
+//        dto.setItem(requestToken.getItem());
+//        return dto;
+//    }
+
 }

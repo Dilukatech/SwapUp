@@ -14,6 +14,20 @@ public class InventoryManager {
     @Autowired
     private InventoryManagerService inventoryManagerService;
 
+    @GetMapping("/get-all-unprocessed-swap-item")//get all unprocessed item to view inventory manager
+    public ResponseEntity<StandardResponse> GetAllUnprocessedSwapItem(){
+        try {
+            return inventoryManagerService.getAllUnprocessedSwapItems();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"Error while processing get all unprocessed item by inventory manager: " + e.getMessage(),null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
     @PostMapping("/arrived_or_return_item")//arrived request item to the shop or shipped rejected item to customer
     public ResponseEntity<StandardResponse> arrivedOrReturnItem(@RequestParam("inventory-manager-id") Long inventoryManagerId,
                                                             @RequestParam("request-token-id") Long requestId,
@@ -26,6 +40,23 @@ public class InventoryManager {
             e.printStackTrace();
             return new ResponseEntity<StandardResponse>(
                     new StandardResponse(500,"Error while processing the arrived shipment of inventory manager: " + e.getMessage(),null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
+    @PostMapping("/shipped-swapping-item")//selected swap item shipped to the customer
+    public ResponseEntity<StandardResponse> shippedSwappingItem(@RequestParam("inventory-manager-id") Long inventoryManagerId,
+                                                                @RequestParam("swap-id") Long swapId,
+                                                                @RequestParam("status") boolean status //0->unprocessed, 1->shipped
+    ) {
+        try {
+            return inventoryManagerService.shippedSwappingItem(inventoryManagerId,swapId,status);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"Error while processing shipping swapped item: " + e.getMessage(),null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
 
         }

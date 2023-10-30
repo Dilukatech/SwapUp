@@ -10,4 +10,6 @@ public interface QualityCheckerService {
     ResponseEntity<StandardResponse>  rejectRequestToken(RejectRequestDto rejectRequestDto);
 
     ResponseEntity<StandardResponse> imageChecking(Long requestId,Long qualityCheckerId, int imageStatus);
+
+//    ResponseEntity<StandardResponse> getAllRequestToken();
 }

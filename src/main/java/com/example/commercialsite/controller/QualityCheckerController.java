@@ -80,6 +80,20 @@ public class QualityCheckerController {
         return result;
     }
 
+//    @GetMapping("/get-all-request-token")//get all request token to view quality checker
+//    public ResponseEntity<StandardResponse>getAllRequestToken(){
+//            try {
+//                return qualityCheckerService.getAllRequestToken();
+//
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//                return new ResponseEntity<StandardResponse>(
+//                        new StandardResponse(500,"Error while processing get all request token by inventory manager: " + e.getMessage(),null),
+//                        HttpStatus.INTERNAL_SERVER_ERROR);
+//
+//            }
+//
+//    }
 
 
 }
