@@ -13,8 +13,8 @@ import javax.transaction.Transactional;
 @Getter
 @Setter
 @Transactional
-@Entity
-@Table(name = "Item")
+@Entity(name = "Item") // hibernate annotations
+@Table(name = "item")
 public class Item {
 
     @Id
@@ -46,20 +46,6 @@ public class Item {
     @ToString.Exclude // to fix circular reference problem
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
-
-    @Override
-    public String toString() {
-        return "Item{" +
-                "itemId=" + itemId +
-                ", color='" + color + '\'' +
-                ", imageURL='" + imageURL + '\'' +
-                ", gender='" + gender + '\'' +
-                ", type='" + type + '\'' +
-                ", price=" + price +
-                ", availableStatus=" + availableStatus +
-                ", size='" + size + '\'' +
-                '}';
-    }
 
 
 

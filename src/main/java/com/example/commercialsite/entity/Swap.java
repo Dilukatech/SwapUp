@@ -4,7 +4,6 @@ import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,33 +12,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Transactional
-@Entity(name = "RequestToken")
-@Table(name = "request_token")
-public class RequestToken {
+@Entity(name = "Swap") // hibernate annotations
+@Table(name = "swap")
+public class Swap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_token_id")
-    private Long requestTokenId;
+    @Column(name = "swap_id")
+    private Long swapId;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Users customerId;
-
-    @ManyToOne
-    @JoinColumn(name = "quality_checker_id")
-    private Users qualityCheckerId;
-
-    @Column(name = "status")
-    private int status;
-
-    @Column(name = "item_Description")
-    private String itemDescription;
-
-    @Column(name = "item_image")
-    private String itemImage;
-
-    @Column(name = "request_date_time")
-    private LocalDateTime requestDateTime;
+    // data jpa relationship // owner
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
+    @ToString.Exclude // to fix circular reference problem
+    private Users users;
 
     // data jpa relationship // owner
     @OneToOne(cascade = CascadeType.ALL)
@@ -52,7 +37,5 @@ public class RequestToken {
     @JoinColumn(name = "token_id")
     @ToString.Exclude // to fix circular reference problem
     private Token token;
-
-
 
 }
