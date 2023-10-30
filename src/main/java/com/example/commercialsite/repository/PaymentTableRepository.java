@@ -11,6 +11,5 @@ public  interface  PaymentTableRepository extends JpaRepository<PaymentTable,Lon
     Optional<List<PaymentTable>> findAllByUserId(Long userId);
 
 
-
-
+    List<PaymentTable> findByIsPayment(boolean isPayment);
 }
