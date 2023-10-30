@@ -2,6 +2,7 @@ package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.dto.request.HelpDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
+import com.example.commercialsite.dto.response.AllRequestResponseDto;
 import com.example.commercialsite.dto.response.RequestTokenResponseDto;
 import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.entity.HelpSupport;
@@ -12,6 +13,7 @@ import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.service.CustomerService;
 import com.example.commercialsite.utill.FromDTO;
+import com.example.commercialsite.utill.RequestMapper;
 import com.example.commercialsite.utill.StandardResponse;
 import com.example.commercialsite.utill.ToDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +41,9 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Autowired
     private HelpSupportRepo helpSupportRepo;
+
+    @Autowired
+    private RequestMapper requestMapper;
 
     @Override
     public ResponseEntity<StandardResponse> CreateRequestToken(RequestTokenRequestDto requestTokenRequestDto) {
@@ -135,7 +140,12 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
-
+    @Override
+    public List<AllRequestResponseDto> getAllRequestByStatus(boolean status) {
+        List<RequestToken> requestTokenList = requestTokenRepo.findAllByStatus(status);
+        List<AllRequestResponseDto> allRequestResponseDtoList = requestMapper.entityListToDTOList(requestTokenList);
+        return allRequestResponseDtoList;
+    }
 
 
 } // end of class CustomerServiceImpl
