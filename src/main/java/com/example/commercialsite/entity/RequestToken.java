@@ -29,8 +29,11 @@ public class RequestToken {
     @JoinColumn(name = "quality_checker_id")
     private Users qualityCheckerId;
 
-    @Column(name = "status")
+    @Column(name = "status")//item accept or reject during the physical checking
     private int status;
+
+    @Column(name = "shipping_approval_status")//request approve or reject during the image checking
+    private int shippingApproval;
 
     @Column(name = "item_Description")
     private String itemDescription;

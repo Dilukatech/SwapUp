@@ -3,13 +3,11 @@ package com.example.commercialsite.service.serviceImpl;
 import com.example.commercialsite.controller.CustomerController;
 import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RejectRequestDto;
+import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Token;
-import com.example.commercialsite.repository.ItemRepo;
-import com.example.commercialsite.repository.RequestTokenRepo;
-import com.example.commercialsite.repository.TokenRepo;
-import com.example.commercialsite.repository.UsersRepo;
+import com.example.commercialsite.repository.*;
 import com.example.commercialsite.service.QualityCheckerService;
 import com.example.commercialsite.service.TokenService;
 import com.example.commercialsite.utill.FromDTO;
@@ -42,6 +40,9 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
     @Autowired
     private UsersRepo usersRepo;
 
+    @Autowired
+    private InventoryManagerTokenRequestRepo inv_mng_TokenRequestRepo;
+
     private final int priceFactor = 1000; // factor by which the price is multiplied
 
     private static final Logger logger = Logger.getLogger(CustomerController.class.getName()); // logger is the recommended way to handel exceptions
@@ -57,6 +58,7 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
              if( requestTokenRepo.existsById( acceptRequestDto.getRequestTokenId() ) ){ // check if the token_request_id is present(valid)
                  // get requestToken object by id
                  RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(acceptRequestDto.getRequestTokenId());
+
 
                  // check if the requestToken is already processed ( accepted/rejected )
                  if ( requestToken.getStatus() == 1 || // accepted
@@ -156,5 +158,56 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
         return result;
     } // end of rejectRequestToken
 
+    @Override
+    public ResponseEntity<StandardResponse> imageChecking(Long requestId,Long qualityCheckerId, int imageStatus) {
+        ResponseEntity<StandardResponse> result;
+        try {
+            if( requestTokenRepo.existsById( requestId ) ){ //check relevant request token id exist in request token table
+                // get requestToken object by id
+                RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(requestId);
+
+
+                // check if the requestToken is already processed ( accepted/rejected )
+                if ( requestToken.getShippingApproval() == 1 || // accepted
+                        requestToken.getShippingApproval() == -1 // rejected
+                ){
+                    return new ResponseEntity<>(
+                            new StandardResponse(208,"request is already processed.", null),
+                            HttpStatus.CREATED);
+                }else {
+
+
+                    //updating the requestToken object with arrived details
+                    requestToken.setQualityCheckerId(usersRepo.getReferenceById(qualityCheckerId));
+                    requestToken.setShippingApproval(imageStatus);
+                    requestTokenRepo.save(requestToken);
+
+                     //if status->1 quality checker approved shipping item
+                     InventoryManagerTokenRequest inv_mng_TokenRequest = new InventoryManagerTokenRequest();
+                     //update request id Inventory Manager Token Request table
+                     inv_mng_TokenRequest.setRequestTokenId(requestId);
+                     //shipment status->0 (item still not arrived)(in inventory manager token request)
+                    inv_mng_TokenRequest.setShipmentStatus(0);
+                    inv_mng_TokenRequestRepo.save(inv_mng_TokenRequest);
+
+
+                    result = new ResponseEntity<>(
+                            new StandardResponse(201, "Data saved successfully.", requestToken),
+                            HttpStatus.CREATED);
+                }
+            }else{ // request_id is not valid
+                result = new ResponseEntity<>(
+                        new StandardResponse(400,"Request Id Not Found",null ),
+                        HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            result = new ResponseEntity<>(
+                    new StandardResponse(500,"Error while processing the image checking: " + ex.getMessage(), null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return result;
+    }
 
 }

@@ -7,10 +7,7 @@ import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,8 +22,26 @@ public class QualityCheckerController {
     @Autowired
     private QualityCheckerService qualityCheckerService;
 
+    @PostMapping("/image-Checking")//accept or reject item by checking image
+    public ResponseEntity<StandardResponse> imageChecking(@RequestParam("request-id") Long requestId,
+                                                          @RequestParam("quality-checker-id") long qualityCheckerId,
+                                                          @RequestParam("image-status") int imageStatus) {
 
-    @PostMapping("/accept-request-token")
+        ResponseEntity<StandardResponse> result;
+
+        try {
+            result = qualityCheckerService.imageChecking(requestId,qualityCheckerId,imageStatus);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"internal server error while processing the Accept Request Token."+ ex.getMessage(),null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+        return result;
+    }
+
+    @PostMapping("/accept-request-token")//accept item by physically checking
     public ResponseEntity<StandardResponse> acceptRequestToken(@RequestBody AcceptRequestDto acceptRequestDto) {
         logger.info("Logging begins... acceptRequestToken");   // log INFO-level message
         ResponseEntity<StandardResponse> result;
@@ -45,7 +60,7 @@ public class QualityCheckerController {
     }
 
 
-    @PostMapping("/reject-request-token")
+    @PostMapping("/reject-request-token")//reject item by physically checking
     public ResponseEntity<StandardResponse> rejectRequestToken(@RequestBody RejectRequestDto rejectRequestDto) {
         logger.info("Logging begins... rejectRequestToken");   // log INFO-level message
         ResponseEntity<StandardResponse> result;
