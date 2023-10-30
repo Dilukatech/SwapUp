@@ -8,4 +8,6 @@ import org.springframework.http.ResponseEntity;
 public interface QualityCheckerService {
     ResponseEntity<StandardResponse> AcceptRequestToken(AcceptRequestDto acceptRequestDto);
     ResponseEntity<StandardResponse>  rejectRequestToken(RejectRequestDto rejectRequestDto);
+
+    ResponseEntity<StandardResponse> imageChecking(Long requestId,Long qualityCheckerId, int imageStatus);
 }

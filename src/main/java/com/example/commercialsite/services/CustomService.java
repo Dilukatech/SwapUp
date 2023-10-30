@@ -2,16 +2,15 @@ package com.example.commercialsite.services;
 
 import com.example.commercialsite.dto.ItemDTO;
 import com.example.commercialsite.dto.request.ProfilePictureRequest;
-import com.example.commercialsite.dto.response.AuthResponse;
-import com.example.commercialsite.dto.response.HelpRequestArrayResponse;
-import com.example.commercialsite.dto.response.ItemResponse;
-import com.example.commercialsite.dto.response.MessageResponse;
+import com.example.commercialsite.dto.response.*;
 import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.entity.Item;
+import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.entity.Users;
 import com.example.commercialsite.repository.HelpSupportRepo;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.repository.RequestTokenRepo;
+import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class CustomService {
     HelpSupportRepo helpSupportRepo;
 
     @Autowired
-    UsersRepo usersRepo;
+    UsersRepo userRepo;
 
     @Autowired
     RequestTokenRepo requestTokenRepo;
@@ -34,8 +33,7 @@ public class CustomService {
     ItemRepo itemRepo;
 
     public HelpRequestArrayResponse getHelpRequest(Long id) {
-        Users user=usersRepo.findByUserId(id);
-        //xaxax
+        Users user=userRepo.findByUserId(id);
         if(user==null){
             return HelpRequestArrayResponse.builder()
                     .message("No user found")
@@ -59,7 +57,7 @@ public class CustomService {
     }
 
     public MessageResponse updateProfilePic(Long id, ProfilePictureRequest profilePictureRequest) {
-        Users user=usersRepo.findByUserId(id);
+        Users user=userRepo.findByUserId(id);
         System.out.println(user);
         if(user==null){
             return MessageResponse.builder()
@@ -67,9 +65,9 @@ public class CustomService {
                     .build();
         }
         user.setProfilePicture(profilePictureRequest.getProfilePic());
-        usersRepo.save(user);
+        userRepo.save(user);
 
-        Users updatedUser=usersRepo.findByUserId(id);
+        Users updatedUser=userRepo.findByUserId(id);
         if(Objects.equals(updatedUser.getProfilePicture(), profilePictureRequest.getProfilePic())){
             return MessageResponse.builder()
                     .message("Updated successfully")
@@ -82,7 +80,7 @@ public class CustomService {
     }
 
     public AuthResponse getMe(Long id) {
-        Users user=usersRepo.findByUserId(id);
+        Users user=userRepo.findByUserId(id);
         if(user==null){
             return AuthResponse.builder()
                     .userId(null)
@@ -117,38 +115,38 @@ public class CustomService {
 //
 //    }
 
-//    public RequestTokenResponse getAllRequestToken() {
-//        List<RequestToken> requestTokenList = requestTokenRepo.findAll();
-//        List<RequestTokenResponseDto> dataArray=new ArrayList<>();
-//
-//        System.out.println(requestTokenList);
-//        if (!requestTokenList.isEmpty()) {
-//            for(RequestToken requestToken:requestTokenList){
-//                RequestTokenResponseDto requestTokenResponseDto=new RequestTokenResponseDto();
-//
-//                requestTokenResponseDto.setRequestTokenId(requestToken.getRequestTokenId());
+    public RequestTokenResponse getAllRequestToken() {
+        List<RequestToken> requestTokenList = requestTokenRepo.findAll();
+        List<RequestTokenResponseDto> dataArray=new ArrayList<>();
+
+        System.out.println(requestTokenList);
+        if (!requestTokenList.isEmpty()) {
+            for(RequestToken requestToken:requestTokenList){
+                RequestTokenResponseDto requestTokenResponseDto=new RequestTokenResponseDto();
+
+                requestTokenResponseDto.setRequestTokenId(requestToken.getRequestTokenId());
 //                requestTokenResponseDto.setCustomerId(requestToken.getCustomerId());
-//                requestTokenResponseDto.setRequestDateTime(requestToken.getRequestDateTime());
-//                requestTokenResponseDto.setItemId(requestTokenResponseDto.getItemId());
-//                requestTokenResponseDto.setItemDescription(requestToken.getItemDescription());
-//                requestTokenResponseDto.setStatus(requestToken.getStatus());
-//                requestTokenResponseDto.setItemImage(requestToken.getItemImage());
-//
-//                dataArray.add(requestTokenResponseDto);
-//
-//            }
-//            return RequestTokenResponse.builder()
-//                    .message("Fetch successfully")
-//                    .data(dataArray)
-//                    .build();
-//        } else {
-//            return RequestTokenResponse.builder()
-//                    .message("Server error")
-//                    .build();
-//        }
-//
-//
-//    }
+                requestTokenResponseDto.setRequestDateTime(requestToken.getRequestDateTime());
+                requestTokenResponseDto.setItemId(requestTokenResponseDto.getItemId());
+                requestTokenResponseDto.setItemDescription(requestToken.getItemDescription());
+                requestTokenResponseDto.setStatus(requestToken.getStatus());
+                requestTokenResponseDto.setItemImage(requestToken.getItemImage());
+
+                dataArray.add(requestTokenResponseDto);
+
+            }
+            return RequestTokenResponse.builder()
+                    .message("Fetch successfully")
+                    .data(dataArray)
+                    .build();
+        } else {
+            return RequestTokenResponse.builder()
+                    .message("Server error")
+                    .build();
+        }
+
+
+    }
 
     public ItemResponse getAllItems() {
         List<ItemDTO> dataArray=new ArrayList<>();
