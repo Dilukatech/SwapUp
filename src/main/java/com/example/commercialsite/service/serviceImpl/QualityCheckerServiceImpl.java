@@ -1,10 +1,9 @@
 package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.controller.CustomerController;
-import com.example.commercialsite.dto.RequestTokenDto;
 import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RejectRequestDto;
-import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
+import com.example.commercialsite.dto.response.RequestTokenDto;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.RequestToken;
@@ -16,6 +15,7 @@ import com.example.commercialsite.utill.FromDTO;
 import com.example.commercialsite.utill.StandardResponse;
 import com.example.commercialsite.utill.ToDTO;
 import org.modelmapper.ModelMapper;
+
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

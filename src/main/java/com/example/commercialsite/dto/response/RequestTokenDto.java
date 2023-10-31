@@ -1,21 +1,24 @@
-package com.example.commercialsite.dto;
+package com.example.commercialsite.dto.response;
 
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.Token;
 import com.example.commercialsite.entity.Users;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
+@Builder
 
-public class RequestTokenDTO {
+
+
+
+public class RequestTokenDto {
 
 
     private Long requestTokenId;
