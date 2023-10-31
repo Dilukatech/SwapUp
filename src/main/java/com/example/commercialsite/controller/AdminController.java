@@ -57,16 +57,22 @@ public class AdminController {
     }
 
 
-    // All requests
+    // All requests count
     @GetMapping("/count-all-requests")
     public ResponseEntity<Long> getCountOfRequests() {
         return requestTokenService.getCountOfRequestTokens();
     }
 
-    // Accept request
+    // Accept request count
     @GetMapping("/count-accept-requests")
     public ResponseEntity<Long> getCountOfRequestTokensWithStatusOne() {
         return requestTokenService.getCountOfRequestTokensWithStatusOne();
+    }
+
+    // Reject request count
+    @GetMapping("/count-reject-requests")
+    public ResponseEntity<Long> getCountOfRequestTokensWithStatusAndShippingApproval() {
+        return requestTokenService.getTotalCountOfRequestTokensWithStatusAndShippingApproval();
     }
 
 

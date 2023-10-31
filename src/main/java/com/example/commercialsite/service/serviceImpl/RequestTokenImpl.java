@@ -33,4 +33,15 @@ public class RequestTokenImpl implements RequestTokenService {
         long count = countRequestTokensWithStatusOne();
         return ResponseEntity.ok(count);
     }
+
+    @Override
+    public long countRequestTokensWithStatusAndShippingApproval(int status, int shippingApproval) {
+        return requestTokenRepo.countByStatusAndShippingApproval(status, shippingApproval);
+    }
+
+    @Override
+    public ResponseEntity<Long> getTotalCountOfRequestTokensWithStatusAndShippingApproval() {
+        long count = countRequestTokensWithStatusAndShippingApproval(-1, -1);
+        return ResponseEntity.ok(count);
+    }
 }

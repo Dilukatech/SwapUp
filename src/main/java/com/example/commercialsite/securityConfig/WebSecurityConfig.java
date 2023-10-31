@@ -57,7 +57,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/payment/get-subscribed-user/{userId}",
                         "/api/v1/admin/get-all-item-in-remaining-store/{status}",
                         "/api/v1/admin/count-all-requests",
-                        "/api/v1/admin/count-accept-requests")
+                        "/api/v1/admin/count-accept-requests",
+                        "/api/v1/admin/count-reject-requests")
                         .permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()

@@ -11,4 +11,7 @@ public interface RequestTokenService {
 
     long countRequestTokensWithStatusOne();
     ResponseEntity<Long> getCountOfRequestTokensWithStatusOne();
+
+    long countRequestTokensWithStatusAndShippingApproval(int status, int shippingApproval);
+    ResponseEntity<Long> getTotalCountOfRequestTokensWithStatusAndShippingApproval();
 }
