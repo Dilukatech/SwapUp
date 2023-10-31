@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemRemainingResponseDto {
-    private Long itemId;
-    //private RequestToken requestToken;
+public class ItemCountResponseDto {
+    private int count;
 }

@@ -52,7 +52,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/help-assistant/GetHelpRequestsFromStatus/**","/api/v1/help-assistant/GetHelpRequests",
                         "/api/v1/inventory-manager/arrived_or_return_item",
                         "/api/v1/admin/get-all-item-in-remaining-store/{status}",
-                        "/api/v1/admin/get-all-request/{status}")
+                        "/api/v1/admin/get-all-request/{status}",
+                        "/api/v1/admin/count-shipment-status")
                         .permitAll()
 
                 .antMatchers(HttpHeaders.ALLOW).permitAll()

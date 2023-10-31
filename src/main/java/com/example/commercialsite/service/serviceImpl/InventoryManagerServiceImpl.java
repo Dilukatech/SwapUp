@@ -1,20 +1,28 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.response.InventoryManagerTokenShippingRequestDTO;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.repository.InventoryManagerTokenRequestRepo;
 import com.example.commercialsite.service.InventoryManagerService;
+import com.example.commercialsite.utill.InventoryRequestMapper;
 import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
+@Transactional
 public class InventoryManagerServiceImpl implements InventoryManagerService {
     @Autowired
     private InventoryManagerTokenRequestRepo inv_managerTokenRequestRepo;
+
+    @Autowired
+    private InventoryRequestMapper inventoryRequestMapper;
 
     @Override
     public ResponseEntity<StandardResponse> arrivedOrReturnItem(Long inventoryManagerId, Long requestId ,int shippingStatus) {
@@ -49,4 +57,14 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
 
 
     }
+
+    @Override
+    public InventoryManagerTokenShippingRequestDTO countShipmentStatus(int shipmentStatus) {
+        Long count = inv_managerTokenRequestRepo.countByShipmentStatus(shipmentStatus);
+        InventoryManagerTokenShippingRequestDTO dto = new InventoryManagerTokenShippingRequestDTO();
+        dto.setCount(count);
+        return dto;
+    }
+
+
 }

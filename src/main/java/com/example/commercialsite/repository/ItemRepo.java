@@ -10,5 +10,8 @@ import java.util.List;
 @Repository
 @EnableJpaRepositories
 public interface ItemRepo extends JpaRepository<Item, Long> {
+
+
+
     List<Item> findAllByAvailableStatus(boolean availableStatus);
 }

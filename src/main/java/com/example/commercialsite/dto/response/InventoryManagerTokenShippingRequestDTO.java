@@ -4,10 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ItemRemainingResponseDto {
-    private Long itemId;
-    //private RequestToken requestToken;
+@NoArgsConstructor
+@Data
+public class InventoryManagerTokenShippingRequestDTO {
+    //private int shipmentStatus;
+    private long count;
 }

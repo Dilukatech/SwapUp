@@ -11,5 +11,8 @@ import java.util.List;
 public interface ItemMapper {
     List<ItemDTO> mapItemsToItemDTOs(List<Item> favoriteItems);
 
-    List<ItemRemainingResponseDto> entityListToDtoList(List<Item> itemList);
+
+    //List<ItemRemainingResponseDto> entityListToDtoList(List<Item> itemList);
+
+    List<ItemDTO> kentityListToDtoList(List<Item> itemList);
 }
