@@ -85,14 +85,14 @@ public class ToDTOImpl implements ToDTO {
 //    public RequestTokenDto getAllRequestToken(RequestToken requestToken) {
 //        RequestTokenDto dto = new RequestTokenDto();
 //        dto.setRequestTokenId(requestToken.getRequestTokenId());
-//        dto.setCustomerId(requestToken.getCustomerId());
-//        dto.setQualityCheckerId(requestToken.getQualityCheckerId());
+//        dto.setCustomerId(requestToken.getCustomerId().getUserId());//
+//        dto.setQualityCheckerId(requestToken.getQualityCheckerId().getUserId());//
 //        dto.setStatus(requestToken.getStatus());
 //        dto.setShippingApproval(requestToken.getShippingApproval());
 //        dto.setItemDescription(requestToken.getItemDescription());
 //        dto.setItemImage(requestToken.getItemImage());
 //        dto.setRequestDateTime(requestToken.getRequestDateTime());
-//        dto.setItem(requestToken.getItem());
+////        dto.setItem(requestToken.getItem().getItemId());//
 //        return dto;
 //    }
 

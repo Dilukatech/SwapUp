@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 @Data
 public class RequestTokenDto {
     private Long requestTokenId;
-    private Users customerId;
-    private Users qualityCheckerId;
+    private Long customerId;
+    private Long qualityCheckerId;
     private int status;
     private int shippingApproval;
     private String itemDescription;
     private String itemImage;
     private LocalDateTime requestDateTime;
-    private Item item;
+//    private Long item;
 
 }

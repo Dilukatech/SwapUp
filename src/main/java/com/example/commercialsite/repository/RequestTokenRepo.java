@@ -14,4 +14,6 @@ public interface RequestTokenRepo extends JpaRepository<RequestToken, Long> {
     RequestToken getRequestTokenByRequestTokenId(Long requestTokenId);
 
     List<RequestToken> getAllByCustomerId(Users customerId);
+
+    List<RequestToken> getAllByShippingApprovalEquals(int i);
 }

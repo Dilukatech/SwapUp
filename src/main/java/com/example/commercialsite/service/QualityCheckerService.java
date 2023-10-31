@@ -11,5 +11,7 @@ public interface QualityCheckerService {
 
     ResponseEntity<StandardResponse> imageChecking(Long requestId,Long qualityCheckerId, int imageStatus);
 
-//    ResponseEntity<StandardResponse> getAllRequestToken();
+    ResponseEntity<StandardResponse> getAllRequestToken();
+
+    ResponseEntity<StandardResponse> getShippingApprovedRequestToken();
 }
