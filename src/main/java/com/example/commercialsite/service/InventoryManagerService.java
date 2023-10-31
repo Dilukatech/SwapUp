@@ -4,12 +4,12 @@ import com.example.commercialsite.dto.response.InventoryManagerTokenShippingRequ
 import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
-
 public interface InventoryManagerService{
+    ResponseEntity<StandardResponse> arrivedOrReturnItem(Long inventoryManagerId, Long requestId, int shippingStatus);
 
-    ResponseEntity<StandardResponse> arrivedOrReturnItem(Long inventoryManagerId, Long requestId,int shippingStatus);
+    ResponseEntity<StandardResponse> shippedSwappingItem(Long inventoryManagerId, Long swapId, boolean status);
 
+    ResponseEntity<StandardResponse> getAllUnprocessedSwapItems();
 
     InventoryManagerTokenShippingRequestDTO countShipmentStatus(int shipmentStatus);
 }

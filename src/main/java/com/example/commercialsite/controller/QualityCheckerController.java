@@ -71,7 +71,7 @@ public class QualityCheckerController {
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
             return new ResponseEntity<StandardResponse>(
-                    new StandardResponse(500,"Error while processing the Accept Request Token: " + ex.getMessage(),null),
+                    new StandardResponse(500,"Error while processing the reject Request Token: " + ex.getMessage(),null),
                     HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
@@ -80,6 +80,34 @@ public class QualityCheckerController {
         return result;
     }
 
+    @GetMapping("/get-all-request-token")//get all request token to view quality checker
+    public ResponseEntity<StandardResponse>getAllRequestToken(){
+            try {
+                return qualityCheckerService.getAllRequestToken();
 
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new ResponseEntity<StandardResponse>(
+                        new StandardResponse(500,"Error while processing get all request token by inventory manager: " + e.getMessage(),null),
+                        HttpStatus.INTERNAL_SERVER_ERROR);
+
+            }
+
+    }
+
+    @GetMapping("/get-shipping-approved-requet-token")//get shipping approved request token to view quality checker
+    public ResponseEntity<StandardResponse>getShippingApprovedRequestToken(){
+        try {
+            return qualityCheckerService.getShippingApprovedRequestToken();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"Error while processing get shipping approved request token by inventory manager: " + e.getMessage(),null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+
+    }
 
 }

@@ -1,28 +1,37 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.response.HelpRequestDto;
+import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
 import com.example.commercialsite.dto.response.InventoryManagerTokenShippingRequestDTO;
+import com.example.commercialsite.entity.HelpSupport;
+import com.example.commercialsite.entity.InventoryManagerSwap;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
+import com.example.commercialsite.repository.InventoryManagerSwapRepo;
 import com.example.commercialsite.repository.InventoryManagerTokenRequestRepo;
 import com.example.commercialsite.service.InventoryManagerService;
-import com.example.commercialsite.utill.InventoryRequestMapper;
+import com.example.commercialsite.utill.FromDTO;
 import com.example.commercialsite.utill.StandardResponse;
+import com.example.commercialsite.utill.ToDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@Transactional
 public class InventoryManagerServiceImpl implements InventoryManagerService {
     @Autowired
     private InventoryManagerTokenRequestRepo inv_managerTokenRequestRepo;
 
     @Autowired
-    private InventoryRequestMapper inventoryRequestMapper;
+    InventoryManagerSwapRepo inventoryManagerSwapRepo;
+
+    @Autowired
+    private ToDTO toDTO;
+
 
     @Override
     public ResponseEntity<StandardResponse> arrivedOrReturnItem(Long inventoryManagerId, Long requestId ,int shippingStatus) {
@@ -54,8 +63,47 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
                     new StandardResponse(400,"Request Id Not Found",null ),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override//selected swapping items shipping to the customer
+    public ResponseEntity<StandardResponse> shippedSwappingItem(Long inventoryManagerId, Long swapId, boolean status) {
+        if (inventoryManagerSwapRepo.existsBySwapIdEquals(swapId)){//check relevant swap id does have
+            //select relevant object by swap id
+            InventoryManagerSwap inventoryManagerSwap = inventoryManagerSwapRepo.getReferenceBySwapIdEquals(swapId);
+
+            inventoryManagerSwap.setInventoryManagerId(inventoryManagerId);
+            inventoryManagerSwap.setDateTime(LocalDateTime.now());
+            inventoryManagerSwap.setSwappingStatus(status);//set the status shipped (1->shipped)
+            inventoryManagerSwapRepo.save(inventoryManagerSwap);
 
 
+            return new ResponseEntity<>(
+                    new StandardResponse(201,"saved Successfully.", inventoryManagerSwap),
+                    HttpStatus.CREATED);
+
+        } else{ // swap-id is not valid
+            return new ResponseEntity<>(
+                    new StandardResponse(400,"swap Id Not Found",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<StandardResponse> getAllUnprocessedSwapItems() {
+        List<InventoryManagerTokenRequest> inventoryManagerTokenRequests = inv_managerTokenRequestRepo.findAllByShipmentStatusEquals(0); //get all unprocessed items
+        List<Inv_Mng_TokenRequestDto> dtoList = new ArrayList<>(); // create a empty dto list
+        if(!inventoryManagerTokenRequests.isEmpty()){ //list are not empty
+            for(InventoryManagerTokenRequest inventoryManagerTokenRequest: inventoryManagerTokenRequests){
+                dtoList.add(toDTO.getAllUnprocessedSwapItems(inventoryManagerTokenRequest));
+            }
+            return new ResponseEntity<>(
+                    new StandardResponse(200,"get all unprocessed request successfully.",dtoList ),
+                    HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>( //list are empty
+                    new StandardResponse(400,"unprocessed inventory manager token request list is Empty.",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override
@@ -65,6 +113,4 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
         dto.setCount(count);
         return dto;
     }
-
-
 }
