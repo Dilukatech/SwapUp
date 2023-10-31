@@ -72,43 +72,49 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                 // get requestToken object by id
                 RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(acceptRequestDto.getRequestTokenId());
 
-
-                // check if the requestToken is already processed ( accepted/rejected )
-                if (requestToken.getStatus() == 1 || // accepted
+                if (requestToken.getShippingApproval()==1) {//check approved the request token
+                   // check if the requestToken is already processed ( accepted/rejected )
+                   if (requestToken.getStatus() == 1 || // accepted
                         requestToken.getStatus() == -1 // rejected
-                ) {
-                    return new ResponseEntity<>(
+                   ) {
+                      return new ResponseEntity<>(
                             new StandardResponse(208, "request is already processed.", null),
                             HttpStatus.CREATED);
-                }
+                   }
 
-                //updating the requestToken object with arrived details
-                requestToken.setQualityCheckerId(usersRepo.getReferenceById(acceptRequestDto.getQualityCheckerId()));
-                requestToken.setStatus(1);
+                      //updating the requestToken object with arrived details
+                      requestToken.setQualityCheckerId(usersRepo.getReferenceById(acceptRequestDto.getQualityCheckerId()));
+                      requestToken.setStatus(1);
 
-                // creating na item object and adding arrived details
-                Item item = fromDTO.getItem(requestToken, acceptRequestDto); // map data
+                      // creating na item object and adding arrived details
+                      Item item = fromDTO.getItem(requestToken, acceptRequestDto); // map data
 
-                // generating token
-                Token token = tokenService.GenerateToken(acceptRequestDto.getRequestTokenId(), acceptRequestDto.getPrice());
+                     // generating token
+                      Token token = tokenService.GenerateToken(acceptRequestDto.getRequestTokenId(), acceptRequestDto.getPrice());
 
-                // setting data in the requestToken
-                requestToken.setToken(token); // suppose to save token in the db wen the requestToken save is called
-                requestToken.setItem(item); // suppose to save item in the db wen the requestToken save is called
-
-
-                // writing to the database
-                requestTokenRepo.save(requestToken);
+                      // setting data in the requestToken
+                       requestToken.setToken(token); // suppose to save token in the db wen the requestToken save is called
+                       requestToken.setItem(item); // suppose to save item in the db wen the requestToken save is called
 
 
-                result = new ResponseEntity<>(
-                        new StandardResponse(201, "Data saved successfully.", null),
-                        HttpStatus.CREATED);
+                     // writing to the database
+                     requestTokenRepo.save(requestToken);
+
+
+                     result = new ResponseEntity<>(
+                            new StandardResponse(201, "Data saved successfully.", null),
+                            HttpStatus.CREATED);
+                   }else {
+                    result = new ResponseEntity<>(
+                            new StandardResponse(400, "Request Token still not shipping approved.", null),
+                            HttpStatus.BAD_REQUEST);
+                   }
             } else { // request_id is not valid
                 result = new ResponseEntity<>(
                         new StandardResponse(400, "Request Id Not Found", null),
                         HttpStatus.BAD_REQUEST);
             }
+
         } catch (Exception ex) {
             //ex.printStackTrace();
             logger.log(Level.SEVERE, ex.getMessage(), ex);
@@ -131,28 +137,34 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                 // get requestToken object by id
                 RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(rejectRequestDto.getRequestTokenId());
 
-                // check if the requestToken is already processed ( accepted/rejected )
-                if (requestToken.getStatus() == 1 || // accepted
-                        requestToken.getStatus() == -1 // rejected
-                ) {
-                    return new ResponseEntity<>(
-                            new StandardResponse(208, "request is already processed.", null),
+                if (requestToken.getShippingApproval()==1) {//check approved the request token
+                    // check if the requestToken is already processed ( accepted/rejected )
+                    if (requestToken.getStatus() == 1 || // accepted
+                            requestToken.getStatus() == -1 // rejected
+                    ) {
+                        return new ResponseEntity<>(
+                                new StandardResponse(208, "request is already processed.", null),
+                                HttpStatus.CREATED);
+                    }
+
+                    //updating the requestToken object with arrived details
+                    requestToken.setQualityCheckerId(usersRepo.getReferenceById(rejectRequestDto.getQualityCheckerId()));
+                    requestToken.setStatus(-1); // rejected
+
+                    // setting package to return-to-customer
+
+
+                    // writing to the database
+                    requestTokenRepo.save(requestToken);
+
+                    result = new ResponseEntity<>(
+                            new StandardResponse(201, "Token Request Rejected Successfully.", null),
                             HttpStatus.CREATED);
+                }else {
+                    result = new ResponseEntity<>(
+                            new StandardResponse(400, "Request Token still not shipping approved.", null),
+                            HttpStatus.BAD_REQUEST);
                 }
-
-                //updating the requestToken object with arrived details
-                requestToken.setQualityCheckerId(usersRepo.getReferenceById(rejectRequestDto.getQualityCheckerId()));
-                requestToken.setStatus(-1); // rejected
-
-                // setting package to return-to-customer
-
-
-                // writing to the database
-                requestTokenRepo.save(requestToken);
-
-                result = new ResponseEntity<>(
-                        new StandardResponse(201, "Token Request Rejected Successfully.", null),
-                        HttpStatus.CREATED);
             } else {
                 result = new ResponseEntity<>(
                         new StandardResponse(400, "Request Token Id Not Found.", null),
