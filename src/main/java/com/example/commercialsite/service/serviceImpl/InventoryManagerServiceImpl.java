@@ -2,6 +2,7 @@ package com.example.commercialsite.service.serviceImpl;
 
 import com.example.commercialsite.dto.response.HelpRequestDto;
 import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
+import com.example.commercialsite.dto.response.InventoryManagerTokenShippingRequestDTO;
 import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.entity.InventoryManagerSwap;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
@@ -103,5 +104,13 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
                     new StandardResponse(400,"unprocessed inventory manager token request list is Empty.",null ),
                     HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @Override
+    public InventoryManagerTokenShippingRequestDTO countShipmentStatus(int shipmentStatus) {
+        Long count = inv_managerTokenRequestRepo.countByShipmentStatus(shipmentStatus);
+        InventoryManagerTokenShippingRequestDTO dto = new InventoryManagerTokenShippingRequestDTO();
+        dto.setCount(count);
+        return dto;
     }
 }

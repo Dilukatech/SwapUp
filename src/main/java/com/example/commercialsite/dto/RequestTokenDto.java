@@ -1,6 +1,7 @@
 package com.example.commercialsite.dto;
 
 import com.example.commercialsite.entity.Item;
+import com.example.commercialsite.entity.Token;
 import com.example.commercialsite.entity.Users;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,15 +14,18 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class RequestTokenDto {
+
+public class RequestTokenDTO {
+
+
     private Long requestTokenId;
-    private Long customerId;
-    private Long qualityCheckerId;
+    private Users customerId;
+    private Users qualityCheckerId;
     private int status;
     private int shippingApproval;
     private String itemDescription;
     private String itemImage;
     private LocalDateTime requestDateTime;
-//    private Long item;
-
+    private Item item;
+    private Token token;
 }

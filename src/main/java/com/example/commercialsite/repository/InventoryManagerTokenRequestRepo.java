@@ -15,4 +15,6 @@ public interface InventoryManagerTokenRequestRepo extends JpaRepository<Inventor
 
     InventoryManagerTokenRequest getReferenceByRequestTokenIdEquals(Long requestId);
     List<InventoryManagerTokenRequest> findAllByShipmentStatusEquals(int i);
+
+    Long countByShipmentStatus(int shipmentStatus);
 }
