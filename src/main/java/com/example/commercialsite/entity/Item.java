@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 import javax.transaction.Transactional;
 
-
 @AllArgsConstructor
 @NoArgsConstructor
 //@Data     // gives a circular reference error // moving toString annotation
@@ -26,7 +25,7 @@ public class Item {
     private String color;
 
     @Column(name = "image_url",nullable = false)
-    private String imageURL;
+    private String imageUrl;
 
     @Column(name = "gender",nullable = false)
     private String gender;
@@ -46,7 +45,6 @@ public class Item {
     @ToString.Exclude // to fix circular reference problem
     @OneToOne(mappedBy = "item", cascade = CascadeType.ALL)
     private RequestToken requestToken;
-
 
 
 }

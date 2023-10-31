@@ -2,6 +2,7 @@ package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.HelpDto;
 import com.example.commercialsite.dto.request.RequestTokenRequestDto;
+import com.example.commercialsite.dto.request.SwapRequestDto;
 import com.example.commercialsite.dto.response.HelpRequestArrayResponse;
 import com.example.commercialsite.dto.response.UsersDTO;
 import com.example.commercialsite.service.CustomerService;
@@ -64,6 +65,25 @@ public class CustomerController {
         }
 
         logger.info("Done... AllRequestTokenFromCustomer");
+        return result;
+    }
+
+    @PostMapping("/requestSwap")
+    public ResponseEntity<StandardResponse> requestSwap(@RequestBody SwapRequestDto swapRequestDto) {
+        logger.info("Logging begins... requestSwap");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
+        try {
+            result = customerService.requestSwap(swapRequestDto);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<>(
+                    new StandardResponse(500,"internal server error in requestSwap from customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        logger.info("Done... requestSwap");
         return result;
     }
 

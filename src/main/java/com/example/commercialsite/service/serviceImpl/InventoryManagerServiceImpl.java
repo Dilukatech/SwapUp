@@ -31,7 +31,7 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
                         HttpStatus.CREATED);
             }else {
                 inv_mng_tokenRequest.setInventoryManagerId(inventoryManagerId);
-                inv_mng_tokenRequest.setShippedOrArrivedTime(LocalDateTime.now());
+                inv_mng_tokenRequest.setTimeCreated(LocalDateTime.now());
                 inv_mng_tokenRequest.setShipmentStatus(shippingStatus);//set the status arrived or return
                 inv_managerTokenRequestRepo.save(inv_mng_tokenRequest);
 
