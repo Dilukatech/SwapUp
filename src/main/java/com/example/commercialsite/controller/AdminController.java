@@ -2,10 +2,14 @@ package com.example.commercialsite.controller;
 
 import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
+import com.example.commercialsite.dto.response.AdminDashboardResponse;
 import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.RequestToken;
+import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.service.*;
 import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,6 +29,10 @@ public class AdminController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    RequestTokenRepo requestTokenRepo;
+
 
     @Autowired
     private InventoryManagerService inventoryManagerService;
@@ -74,6 +82,23 @@ public class AdminController {
     public ResponseEntity<Long> getCountOfRequestTokensWithStatusAndShippingApproval() {
         return requestTokenService.getTotalCountOfRequestTokensWithStatusAndShippingApproval();
     }
+
+    @GetMapping("/admin-dashboard-data")
+    public  ResponseEntity<?> getAdminData(){
+        AdminDashboardResponse adminDashboardResponse=new AdminDashboardResponse();
+        List< RequestToken> totalRequestArray = requestTokenRepo.findAll();
+        long total= totalRequestArray.size();
+        adminDashboardResponse.setTotalRequests(total);
+
+        List<RequestToken> re=requestTokenRepo.findAllByStatus(-1);
+        long rej=re.size();
+        adminDashboardResponse.setRejectedRequests(rej);
+
+
+        return new ResponseEntity<>(adminDashboardResponse, HttpStatus.OK);
+    }
+
+
 
 
 

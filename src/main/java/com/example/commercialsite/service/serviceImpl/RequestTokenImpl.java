@@ -1,5 +1,6 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.response.AdminDashboardResponse;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.service.RequestTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class RequestTokenImpl implements RequestTokenService {
     public ResponseEntity<Long> getCountOfRequestTokens() {
         long count = countRequestTokens();
         return ResponseEntity.ok(count);
+
     }
 
     @Override

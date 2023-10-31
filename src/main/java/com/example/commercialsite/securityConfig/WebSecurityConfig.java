@@ -39,7 +39,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("api/v1/favorites/{userId}","api/v1/favorites/{userId}/items/{itemId}","/api/v1/favorites/add-favorites",
                         "/api/v1/item/save-item","/api/v1/item/get-items",
                         "/api/v1/user/update-profile-pic/{id}",
-                        "/api/v1/user/get-user/{id}",
+                        "/api/v1/user/get-user/{id}","/api/v1/admin/admin-dashboard-data",
                         "/api/v1/user/login","/api/v1/customer/get-help-request/{id}",
                         "/api/v1/user/verification/**",
                         "/api/v1/admin/register-staff","/api/v1/admin/hold-user","/api/v1/admin/get-all-users",
