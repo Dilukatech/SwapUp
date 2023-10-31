@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 @EnableJpaRepositories
 public interface ItemRepo extends JpaRepository<Item, Long> {
+    long countByAvailableStatus(boolean availableStatus);
 }

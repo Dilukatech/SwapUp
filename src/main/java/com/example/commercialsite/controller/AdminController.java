@@ -3,8 +3,8 @@ package com.example.commercialsite.controller;
 import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.UsersDTO;
-import com.example.commercialsite.service.AdminService;
-import com.example.commercialsite.service.UserService;
+import com.example.commercialsite.service.*;
+import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +19,19 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private ItemService itemService;
+
+    @Autowired
+    private CustomerService customerService;
+
+    @Autowired
+    private InventoryManagerService inventoryManagerService;
+
+    @Autowired
+    private RequestTokenService requestTokenService;
+
 
     @PostMapping(path = "/register-staff")
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -35,4 +48,38 @@ public class AdminController {
         return userService.getAllUsers();
     }
 
+
+    // Reaming Item in store
+    @GetMapping(path = "/get-all-item-in-remaining-store/{status}")
+    public StandardResponse countItemsByAvailableStatus(@RequestParam("availableStatus") boolean availableStatus) {
+        long count = itemService.countItemsByAvailableStatus(availableStatus);
+        return new StandardResponse(200, "Success", (int) count);
+    }
+
+
+    // All requests
+    @GetMapping("/count-all-requests")
+    public ResponseEntity<Long> getCountOfRequests() {
+        return requestTokenService.getCountOfRequestTokens();
+    }
+
+    // Accept request
+    @GetMapping("/count-accept-requests")
+    public ResponseEntity<Long> getCountOfRequestTokensWithStatusOne() {
+        return requestTokenService.getCountOfRequestTokensWithStatusOne();
+    }
+
+
+
+    // Rejected Request
+//    @GetMapping(path = "/get-all-request/{status}")
+//    public StandardResponse countAllRequestByStatus(@PathVariable(value = "status") int shipmentStatus){
+//        long count = .countRequestByStatus(shipmentStatus);
+//        return new StandardResponse(200, "Success", (int) count);
+//    }
+
+
+    // How Many Item Swap for InventoryManagerSwap
 }
+
+

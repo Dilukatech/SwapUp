@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public interface ItemService {
+    long countItemsByAvailableStatus(boolean availableStatus);
 
 
 //    boolean saveItem(ItemSaveRequestDTO itemSaveRequestDTO);
