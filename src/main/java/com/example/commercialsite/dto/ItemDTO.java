@@ -1,11 +1,9 @@
 package com.example.commercialsite.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.commercialsite.entity.RequestToken;
+import lombok.*;
 
-import javax.persistence.Column;
+import javax.persistence.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,6 +17,7 @@ public class ItemDTO {
     private String gender;
     private String type;
     private int price;
-    private boolean activeState;
+    private boolean availableStatus;
     private String size;
+    private RequestToken requestToken;
 }

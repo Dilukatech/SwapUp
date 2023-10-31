@@ -160,7 +160,7 @@ public class CustomService {
                 itemDTO.setGender(item.getGender());
                 itemDTO.setSize(item.getSize());
                 itemDTO.setType(item.getType());
-                itemDTO.setActiveState(item.isAvailableStatus());
+                itemDTO.setAvailableStatus(item.isAvailableStatus());
                 itemDTO.setPrice(item.getPrice());
                 itemDTO.setImageURL(item.getImageURL());
 
