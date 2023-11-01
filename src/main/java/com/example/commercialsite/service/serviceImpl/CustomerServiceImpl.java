@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,14 +37,19 @@ public class CustomerServiceImpl implements CustomerService {
     @Autowired
     private TokenRepo tokenRepo;
 
-    @Autowired
-    private CustomerSubscriptionRepo customerSubscriptionRepo;
+    //@Autowired
+    //private CustomerSubscriptionRepo customerSubscriptionRepo;
 
     @Autowired
     private SwapRepo swapRepo;
 
     @Autowired
     private InventoryManagerSwapRepo inventoryManagerSwapRepo;
+
+    @Autowired
+    private PaymentTableRepository paymentTableRepository;
+
+    //private PaymentTable paymentTable;
 
     @Autowired
     private ToDTO toDTO;
@@ -99,7 +103,7 @@ public class CustomerServiceImpl implements CustomerService {
         if (usersRepo.existsByEmailEquals(usersDTO.getEmail())) { // user exist
             Users users = usersRepo.getReferenceById(usersDTO.getUserId()); // getting the user as an object
 
-            if (users.isVerified() || // user is verified?
+            if (users.isVerified() && // user is verified?
                     users.isActiveStatus() // user is active?
             ) {// user is verified and active
 //                List<RequestToken> list = requestTokenRepo.getAllByCustomerId(usersDTO.getUserId()); // previous code does not work any more after jhibernate relationships
@@ -166,48 +170,51 @@ public class CustomerServiceImpl implements CustomerService {
 
             // check subscription validity
             //boolean subscriptionValidity = false;
-            if( !customerSubscriptionRepo.existsById(swapRequestDto.getCustomerId()) ){ // some sort of subscription  not available
+            if( !paymentTableRepository.existsById(swapRequestDto.getCustomerId()) ){ // some sort of subscription  not available
                 return new ResponseEntity<>(
                         new StandardResponse(201, "subscription not available", null),
                         HttpStatus.CONFLICT
                 );
             }
-            CustomerSubscription customerSubscription = customerSubscriptionRepo.getReferenceById(swapRequestDto.getCustomerId());
+            //CustomerSubscription customerSubscription = customerSubscriptionRepo.getReferenceById(swapRequestDto.getCustomerId());
+            PaymentTable paymentTable = paymentTableRepository.getReferenceById(swapRequestDto.getUserId());
 
             // check customerSubscription state
-            if( !customerSubscription.isState() ){ // state is false
+            if( !paymentTable.isPayment() ){ // state is false
                 return new ResponseEntity<>(
                         new StandardResponse(201, "subscription is not valid", null),
                         HttpStatus.CONFLICT
                 );
             }
 
-            // is swaps available
-            if (customerSubscription.getCount() == 0) { // swaps not available
-                // setting subscription state invalid
-                customerSubscription.setState(false);
-                return new ResponseEntity<>(
-                        new StandardResponse(201, "swaps not available", null),
-                        HttpStatus.CONFLICT
-                );
-            } // swaps available
-            // reducing one from count //
-            customerSubscription.setCount( customerSubscription.getCount() - 1 ); //
 
-            LocalDateTime start = customerSubscription.getDateTime(); // time of subscription purchase
-            LocalDateTime end = LocalDateTime.now(); // current time
-            long duration = Duration.between(start, end).getSeconds();
+//            // is swaps available
+//            if (customerSubscription.getCount() == 0) { // swaps not available
+//                // setting subscription state invalid
+//                customerSubscription.setState(false);
+//                return new ResponseEntity<>(
+//                        new StandardResponse(201, "swaps not available", null),
+//                        HttpStatus.CONFLICT
+//                );
+//            } // swaps available
+//            // reducing one from count //
+//            customerSubscription.setCount( customerSubscription.getCount() - 1 ); //
+//
+//            LocalDateTime start = customerSubscription.getDateTime(); // time of subscription purchase
+//            LocalDateTime end = LocalDateTime.now(); // current time
+//            long duration = Duration.between(start, end).getSeconds();
+//
+//            // is subscription time available
+//            if (duration < 60 * 10) { // 10 minutes or more is not  available
+//                // setting subscription state invalid
+//                customerSubscription.setState(false);
+//                return new ResponseEntity<>(
+//                        new StandardResponse(201, "end of subscription", null),
+//                        HttpStatus.CONFLICT
+//                );
+//
+//            } // 10 minutes or more is available  // subscription validity ends 10 minutes before the exact end time
 
-            // is subscription time available
-            if (duration < 60 * 10) { // 10 minutes or more is not  available
-                // setting subscription state invalid
-                customerSubscription.setState(false);
-                return new ResponseEntity<>(
-                        new StandardResponse(201, "end of subscription", null),
-                        HttpStatus.CONFLICT
-                );
-
-            } // 10 minutes or more is available  // subscription validity ends 10 minutes before the exact end time
 
             // item availability
             if( !itemRepo.existsById(swapRequestDto.getItemId()) ){ // item does not exist
@@ -259,7 +266,7 @@ public class CustomerServiceImpl implements CustomerService {
             /// ready to request swapping
             Swap swap = fromDTO.getSwapRequest(swapRequestDto);
             // writing to database
-            customerSubscriptionRepo.save(customerSubscription);
+            //customerSubscriptionRepo.save(customerSubscription);
             Swap swapSaved = swapRepo.save(swap);
 
             // connecting inventoryManagerSwap to swap object
