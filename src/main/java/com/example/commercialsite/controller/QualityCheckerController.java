@@ -27,10 +27,11 @@ public class QualityCheckerController {
                                                           @RequestParam("quality-checker-id") long qualityCheckerId,
                                                           @RequestParam("image-status") int imageStatus) {
 
-        ResponseEntity<StandardResponse> result;
+//        ResponseEntity<StandardResponse> result;
 
         try {
-            result = qualityCheckerService.imageChecking(requestId,qualityCheckerId,imageStatus);
+//            result = qualityCheckerService.imageChecking(requestId,qualityCheckerId,imageStatus);
+           return qualityCheckerService.imageChecking(requestId,qualityCheckerId,imageStatus);
         } catch (Exception ex) {
             logger.log(Level.SEVERE, ex.getMessage(), ex);
             return new ResponseEntity<StandardResponse>(
@@ -38,7 +39,6 @@ public class QualityCheckerController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return result;
     }
 
     @PostMapping("/accept-request-token")//accept item by physically checking
