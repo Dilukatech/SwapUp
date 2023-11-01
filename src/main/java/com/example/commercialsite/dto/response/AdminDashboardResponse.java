@@ -14,7 +14,7 @@ public class AdminDashboardResponse {
     private long rejectedRequests;
     private long acceptedRequests;
     private long totalSwaps;
-    private long ReceivedItems;
+    private long reamingItemInStore;
     private long totalCustomers;
     private double totalProfit;
     private double totalGoldMembership;

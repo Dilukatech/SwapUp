@@ -4,12 +4,8 @@ import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.AdminDashboardResponse;
 import com.example.commercialsite.dto.response.UsersDTO;
-import com.example.commercialsite.entity.Customer;
-import com.example.commercialsite.entity.PaymentTable;
-import com.example.commercialsite.entity.RequestToken;
-import com.example.commercialsite.repository.CustomerRepo;
-import com.example.commercialsite.repository.PaymentTableRepository;
-import com.example.commercialsite.repository.RequestTokenRepo;
+import com.example.commercialsite.entity.*;
+import com.example.commercialsite.repository.*;
 import com.example.commercialsite.service.*;
 import com.example.commercialsite.utill.StandardResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +32,12 @@ public class AdminController {
 
     @Autowired
     private PaymentTableRepository paymentTableRepository;
+
+    @Autowired
+    private ItemRepo itemRepo;
+
+    @Autowired
+    private SwapRepo swapRepo;
 
 
     @PostMapping(path = "/register-staff")
@@ -70,7 +72,6 @@ public class AdminController {
         List<RequestToken> total1RejectArray = requestTokenRepo.findAllByShippingApproval(-1);
         long rej2= total1RejectArray.size();
         long totals= rej1+rej2;
-
         adminDashboardResponse.setRejectedRequests(totals);
 
         //Accepted Requests
@@ -80,8 +81,15 @@ public class AdminController {
 
 
         //Total Swaps
+        List<Swap> totalSwapArray = swapRepo.findAll();
+        long totalSwapItem = totalSwapArray.size();
+        adminDashboardResponse.setTotalSwaps(totalSwapItem);
 
-        //Received Items
+
+        //Items Reaming in Store
+        List<Item> reamingItemArray = itemRepo.findByAvailableStatusTrue();
+        long reamingItems = reamingItemArray.size();
+        adminDashboardResponse.setReamingItemInStore(reamingItems);
 
         //Total Customer
         List<Customer> totalCustomerArray = customerRepo.findAll();
