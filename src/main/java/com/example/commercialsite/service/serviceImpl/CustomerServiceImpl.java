@@ -327,6 +327,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
     }
 
+    @Override
+    public ResponseEntity<StandardResponse> getSwapStatus(long id) {
+        if (usersRepo.existsByUserIdEquals(id)) { // user exist
+            List<InventoryManagerSwap> list = inventoryManagerSwapRepo.getAllByCustomerIdEquals(id);
+
+            return new ResponseEntity<>(
+                    new StandardResponse(200, "user is not found", list),
+                    HttpStatus.BAD_REQUEST
+            );
+        } else{
+            return new ResponseEntity<>(
+                    new StandardResponse(201, "user is not found", null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+    }
+
 
 } // end of class CustomerServiceImpl
 
