@@ -59,7 +59,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/v1/admin/count-all-requests",
                         "/api/v1/admin/count-accept-requests",
                         "/api/v1/admin/count-reject-requests",
-                        "/api/v1/customer/requestSwap"
+                        "/api/v1/customer/requestSwap",
+                        "/api/v1/customer/get-valid-tokens/{id}",
+                        "/api/v1/customer/get-shipped-swaps/{id}"
                         )
                         .permitAll()
 

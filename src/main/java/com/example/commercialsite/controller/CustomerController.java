@@ -123,8 +123,8 @@ public class CustomerController {
         return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/get-valid-tokens")
-    public ResponseEntity<StandardResponse> getValidTokens(@RequestBody long id) {
+    @PostMapping("/get-valid-tokens/{id}")
+    public ResponseEntity<StandardResponse> getValidTokens(@PathVariable long id) {
         logger.info("Logging begins... getValidTokens");   // log INFO-level message
         ResponseEntity<StandardResponse> result;
 
@@ -139,6 +139,25 @@ public class CustomerController {
         }
 
         logger.info("Done... getValidTokens");
+        return result;
+    }
+
+    @PostMapping("/get-shipped-swaps/{id}")
+    public ResponseEntity<StandardResponse> getSwapStatus(@PathVariable long id) {
+        logger.info("Logging begins... getSwapStatus");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
+        try {
+            result = customerService.getSwapStatus(id);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<>(
+                    new StandardResponse(500,"internal server error in requestSwap from customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        logger.info("Done... getSwapStatus");
         return result;
     }
 
