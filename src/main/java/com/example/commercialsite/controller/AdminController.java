@@ -29,20 +29,7 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    private ItemService itemService;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
     RequestTokenRepo requestTokenRepo;
-
-
-    @Autowired
-    private InventoryManagerService inventoryManagerService;
-
-    @Autowired
-    private RequestTokenService requestTokenService;
 
     @Autowired
     private CustomerRepo customerRepo;
