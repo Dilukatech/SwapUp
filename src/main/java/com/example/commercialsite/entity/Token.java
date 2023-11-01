@@ -38,4 +38,7 @@ public class Token {
     @OneToOne(mappedBy = "token", cascade = CascadeType.ALL)
     private RequestToken requestToken;
 
+    @Column(name = "user_id")
+    private long userId;
+
 }

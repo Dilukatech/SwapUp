@@ -4,7 +4,6 @@ import com.example.commercialsite.controller.CustomerController;
 import com.example.commercialsite.dto.RequestTokenDto;
 import com.example.commercialsite.dto.request.AcceptRequestDto;
 import com.example.commercialsite.dto.request.RejectRequestDto;
-import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.entity.Item;
 import com.example.commercialsite.entity.RequestToken;
@@ -22,7 +21,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,7 +88,7 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                       Item item = fromDTO.getItem(requestToken, acceptRequestDto); // map data
 
                      // generating token
-                      Token token = tokenService.GenerateToken(acceptRequestDto.getRequestTokenId(), acceptRequestDto.getPrice());
+                      Token token = tokenService.GenerateToken(acceptRequestDto.getRequestTokenId(), acceptRequestDto.getPrice(), requestToken.getCustomerId().getUserId() );
 
                       // setting data in the requestToken
                        requestToken.setToken(token); // suppose to save token in the db wen the requestToken save is called

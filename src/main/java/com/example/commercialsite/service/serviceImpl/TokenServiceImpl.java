@@ -16,7 +16,7 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     private RequestTokenRepo requestTokenRepo;
 
-    public Token GenerateToken (Long requestTokenId, int price) throws NoSuchAlgorithmException {
+    public Token GenerateToken (Long requestTokenId, int price, long userId) throws NoSuchAlgorithmException {
         //requestToken object
         RequestToken requestToken = requestTokenRepo.getReferenceById(requestTokenId);
         //new token object
@@ -25,6 +25,7 @@ public class TokenServiceImpl implements TokenService {
         token.setState(true);
         token.setTimeCreated(LocalDateTime.now());
         token.setPrice(price);
+        token.setUserId(userId);
 
         return token;
     }

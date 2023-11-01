@@ -18,4 +18,6 @@ public interface CustomerService {
     ResponseEntity<StandardResponse> HelpRequestFromCustomer(HelpDto helpDto);
 
     ResponseEntity<StandardResponse> requestSwap(SwapRequestDto swapRequestDto);
+
+    ResponseEntity<StandardResponse> getValidTokens(long id);
 }

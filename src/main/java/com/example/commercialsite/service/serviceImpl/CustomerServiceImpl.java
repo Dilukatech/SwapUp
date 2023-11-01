@@ -278,7 +278,7 @@ public class CustomerServiceImpl implements CustomerService {
 
             /* success */
             return new ResponseEntity<>(
-                    new StandardResponse(201, "swap request was created", null),
+                    new StandardResponse(200, "swap request was created", null),
                     HttpStatus.OK
             );
 
@@ -291,6 +291,23 @@ public class CustomerServiceImpl implements CustomerService {
         }
 
     } // end of class requestSwap
+
+    @Override
+    public ResponseEntity<StandardResponse> getValidTokens(long id) { //return all valid tokens for that user
+        if (usersRepo.existsByUserIdEquals(id)) { // user exist
+            List<Token> list = tokenRepo.getAllByUserIdAndStateEquals(id, true);
+
+            return new ResponseEntity<>(
+                    new StandardResponse(201, "user is not found", list),
+                    HttpStatus.BAD_REQUEST
+            );
+        } else{
+            return new ResponseEntity<>(
+                    new StandardResponse(201, "user is not found", null),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+    }
 
 
 } // end of class CustomerServiceImpl

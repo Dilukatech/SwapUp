@@ -123,5 +123,24 @@ public class CustomerController {
         return new ResponseEntity<>(response,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @PostMapping("/get-valid-tokens")
+    public ResponseEntity<StandardResponse> getValidTokens(@RequestBody long id) {
+        logger.info("Logging begins... getValidTokens");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
+        try {
+            result = customerService.getValidTokens(id);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<>(
+                    new StandardResponse(500,"internal server error in requestSwap from customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        logger.info("Done... getValidTokens");
+        return result;
+    }
+
 
 }
