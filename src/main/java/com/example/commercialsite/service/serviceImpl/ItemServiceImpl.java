@@ -23,10 +23,7 @@ public class ItemServiceImpl implements ItemService {
     @Autowired
     private ItemMapper itemMapper;
 
-    @Override
-    public long countItemsByAvailableStatus(boolean availableStatus) {
-        return itemRepo.countByAvailableStatus(availableStatus);
-    }
+
 
 //    @Override
 //    public boolean saveItem(ItemSaveRequestDTO itemSaveRequestDTO) {

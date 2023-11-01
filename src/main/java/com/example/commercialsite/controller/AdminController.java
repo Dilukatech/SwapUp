@@ -4,7 +4,11 @@ import com.example.commercialsite.dto.request.HoldDto;
 import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
 import com.example.commercialsite.dto.response.AdminDashboardResponse;
 import com.example.commercialsite.dto.response.UsersDTO;
+import com.example.commercialsite.entity.Customer;
+import com.example.commercialsite.entity.PaymentTable;
 import com.example.commercialsite.entity.RequestToken;
+import com.example.commercialsite.repository.CustomerRepo;
+import com.example.commercialsite.repository.PaymentTableRepository;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.service.*;
 import com.example.commercialsite.utill.StandardResponse;
@@ -40,6 +44,12 @@ public class AdminController {
     @Autowired
     private RequestTokenService requestTokenService;
 
+    @Autowired
+    private CustomerRepo customerRepo;
+
+    @Autowired
+    private PaymentTableRepository paymentTableRepository;
+
 
     @PostMapping(path = "/register-staff")
 //    @PreAuthorize("hasRole('ADMIN')")
@@ -57,60 +67,70 @@ public class AdminController {
     }
 
 
-    // Reaming Item in store
-    @GetMapping(path = "/get-all-item-in-remaining-store/{status}")
-    public StandardResponse countItemsByAvailableStatus(@RequestParam("availableStatus") boolean availableStatus) {
-        long count = itemService.countItemsByAvailableStatus(availableStatus);
-        return new StandardResponse(200, "Success", (int) count);
-    }
-
-
-    // All requests count
-    @GetMapping("/count-all-requests")
-    public ResponseEntity<Long> getCountOfRequests() {
-        return requestTokenService.getCountOfRequestTokens();
-    }
-
-    // Accept request count
-    @GetMapping("/count-accept-requests")
-    public ResponseEntity<Long> getCountOfRequestTokensWithStatusOne() {
-        return requestTokenService.getCountOfRequestTokensWithStatusOne();
-    }
-
-    // Reject request count
-    @GetMapping("/count-reject-requests")
-    public ResponseEntity<Long> getCountOfRequestTokensWithStatusAndShippingApproval() {
-        return requestTokenService.getTotalCountOfRequestTokensWithStatusAndShippingApproval();
-    }
-
     @GetMapping("/admin-dashboard-data")
     public  ResponseEntity<?> getAdminData(){
         AdminDashboardResponse adminDashboardResponse=new AdminDashboardResponse();
+
+        // Total Request
         List< RequestToken> totalRequestArray = requestTokenRepo.findAll();
         long total= totalRequestArray.size();
         adminDashboardResponse.setTotalRequests(total);
 
+        // Rejected Request
         List<RequestToken> re=requestTokenRepo.findAllByStatus(-1);
-        long rej=re.size();
-        adminDashboardResponse.setRejectedRequests(rej);
+        long rej1=re.size();
+
+        List<RequestToken> total1RejectArray = requestTokenRepo.findAllByShippingApproval(-1);
+        long rej2= total1RejectArray.size();
+        long totals= rej1+rej2;
+
+        adminDashboardResponse.setRejectedRequests(totals);
+
+        //Accepted Requests
+        List<RequestToken> totalAcceptedArray = requestTokenRepo.findAllByStatus(1);
+        long totalAcceptedRequests = totalAcceptedArray.size();
+        adminDashboardResponse.setAcceptedRequests(totalAcceptedRequests);
+
+
+        //Total Swaps
+
+        //Received Items
+
+        //Total Customer
+        List<Customer> totalCustomerArray = customerRepo.findAll();
+        long totalCustomers = totalCustomerArray.size();
+        adminDashboardResponse.setTotalCustomers(totalCustomers);
+
+        //Total Profit
+        List<PaymentTable> totalPayments = paymentTableRepository.findByIsPaymentTrue();
+        double totalPrice = 0.0;
+
+        for (PaymentTable payment : totalPayments) {
+                totalPrice += payment.getPrice(); // Add the price to the total
+        }
+        adminDashboardResponse.setTotalProfit(totalPrice);
+
+        //count gold membership
+        List<PaymentTable> goldPayments = paymentTableRepository.findByIsPaymentIsTrueAndPlanName("gold");
+        double totalGoldPayment = goldPayments.stream().mapToDouble(PaymentTable::getPrice).sum();
+        adminDashboardResponse.setTotalGoldMembership(totalGoldPayment);
+
+        //count platinum Membership
+        List<PaymentTable> platinumPayments = paymentTableRepository.findByIsPaymentIsTrueAndPlanName("platinum");
+        double totalPlatinumPayment = platinumPayments.stream().mapToDouble(PaymentTable::getPrice).sum();
+        adminDashboardResponse.setPlatinumMembership(totalPlatinumPayment);
+
+
+        //count Diamond Membership
+        List<PaymentTable> diamondPayments = paymentTableRepository.findByIsPaymentIsTrueAndPlanName("diamond");
+        double totalDiamondPayment = platinumPayments.stream().mapToDouble(PaymentTable::getPrice).sum();
+        adminDashboardResponse.setDiamondMembership(totalDiamondPayment);
 
 
         return new ResponseEntity<>(adminDashboardResponse, HttpStatus.OK);
     }
 
 
-
-
-
-    // Rejected Request
-//    @GetMapping(path = "/get-all-request/{status}")
-//    public StandardResponse countAllRequestByStatus(@PathVariable(value = "status") int shipmentStatus){
-//        long count = .countRequestByStatus(shipmentStatus);
-//        return new StandardResponse(200, "Success", (int) count);
-//    }
-
-
-    // How Many Item Swap for InventoryManagerSwap
 }
 
 

@@ -6,12 +6,8 @@ import org.springframework.stereotype.Service;
 @Service
 public interface RequestTokenService {
 
-    long countRequestTokens();
-    ResponseEntity<Long> getCountOfRequestTokens();
 
-    long countRequestTokensWithStatusOne();
-    ResponseEntity<Long> getCountOfRequestTokensWithStatusOne();
 
-    long countRequestTokensWithStatusAndShippingApproval(int status, int shippingApproval);
-    ResponseEntity<Long> getTotalCountOfRequestTokensWithStatusAndShippingApproval();
+
+
 }

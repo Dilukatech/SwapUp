@@ -14,4 +14,7 @@ public interface PaymentTableRepository extends JpaRepository<PaymentTable,Long>
 
     List<PaymentTable> findByIsPayment(boolean isPayment);
 
+    List<PaymentTable> findByIsPaymentTrue();
+
+    List<PaymentTable> findByIsPaymentIsTrueAndPlanName(String planName);
 }

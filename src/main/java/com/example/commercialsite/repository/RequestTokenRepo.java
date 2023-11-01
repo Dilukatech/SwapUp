@@ -18,8 +18,10 @@ public interface RequestTokenRepo extends JpaRepository<RequestToken, Long> {
     List<RequestToken> getAllByShippingApprovalEquals(int i);
 
 
-    long countByStatus(int i);
 
-    long countByStatusAndShippingApproval(int status, int shippingApproval);
+
+
     List<RequestToken> findAllByStatus(int i);
+
+    List<RequestToken> findAllByShippingApproval(int i);
 }
