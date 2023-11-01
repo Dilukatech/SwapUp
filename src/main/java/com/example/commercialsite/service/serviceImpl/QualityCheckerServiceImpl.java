@@ -186,7 +186,7 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
     @Override
     public ResponseEntity<StandardResponse> imageChecking(Long requestId, Long qualityCheckerId, int imageStatus) {
 
-//        try {
+        try {
             if (requestTokenRepo.existsById(requestId)) { //check relevant request token id exist in request token table
                 // get requestToken object by id
                 RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(requestId);
@@ -227,14 +227,14 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                         new StandardResponse(400, "Request Id Not Found", null),
                         HttpStatus.BAD_REQUEST);
             }
-//        } catch (Exception ex) {
-////            //ex.printStackTrace();
-////            logger.log(Level.SEVERE, ex.getMessage(), ex);
-//////            result = new ResponseEntity<>(
-////            return new ResponseEntity<>(
-////                    new StandardResponse(500, "Error while processing the image checking: " + ex.getMessage(), null),
-////                    HttpStatus.INTERNAL_SERVER_ERROR);
-////        }
+        } catch (Exception ex) {
+            //ex.printStackTrace();
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+//            result = new ResponseEntity<>(
+            return new ResponseEntity<>(
+                    new StandardResponse(500, "Error while processing the image checking: " + ex.getMessage(), null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
