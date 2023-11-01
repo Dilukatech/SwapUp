@@ -185,8 +185,8 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
 
     @Override
     public ResponseEntity<StandardResponse> imageChecking(Long requestId, Long qualityCheckerId, int imageStatus) {
-        ResponseEntity<StandardResponse> result;
-        try {
+
+//        try {
             if (requestTokenRepo.existsById(requestId)) { //check relevant request token id exist in request token table
                 // get requestToken object by id
                 RequestToken requestToken = requestTokenRepo.getRequestTokenByRequestTokenId(requestId);
@@ -216,23 +216,26 @@ public class QualityCheckerServiceImpl implements QualityCheckerService {
                     inv_mng_TokenRequestRepo.save(inv_mng_TokenRequest);
 
 
-                    result = new ResponseEntity<>(
+//                    result = new ResponseEntity<>(
+                    return new ResponseEntity<>(
                             new StandardResponse(201, "Data saved successfully.", requestToken),
                             HttpStatus.CREATED);
                 }
             } else { // request_id is not valid
-                result = new ResponseEntity<>(
+//                result = new ResponseEntity<>(
+                return new ResponseEntity<>(
                         new StandardResponse(400, "Request Id Not Found", null),
                         HttpStatus.BAD_REQUEST);
             }
-        } catch (Exception ex) {
-            //ex.printStackTrace();
-            logger.log(Level.SEVERE, ex.getMessage(), ex);
-            result = new ResponseEntity<>(
-                    new StandardResponse(500, "Error while processing the image checking: " + ex.getMessage(), null),
-                    HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-        return result;
+//        } catch (Exception ex) {
+////            //ex.printStackTrace();
+////            logger.log(Level.SEVERE, ex.getMessage(), ex);
+//////            result = new ResponseEntity<>(
+////            return new ResponseEntity<>(
+////                    new StandardResponse(500, "Error while processing the image checking: " + ex.getMessage(), null),
+////                    HttpStatus.INTERNAL_SERVER_ERROR);
+////        }
+
     }
 
     @Override
