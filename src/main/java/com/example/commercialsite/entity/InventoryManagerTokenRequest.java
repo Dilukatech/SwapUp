@@ -8,12 +8,12 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity(name = "InventoryManagerTokenRequest")
-@Table(name = "inventory_manager_token_request")
 @ToString
 @Getter
 @Setter
 @Transactional
+@Entity(name = "InventoryManagerTokenRequest")
+@Table(name = "inventory_manager_token_request")
 public class InventoryManagerTokenRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,8 +29,8 @@ public class InventoryManagerTokenRequest {
     @JoinColumn(name = "request_token_id")
     private Long requestTokenId;
 
-    @Column(name = "shipped_or_arrived_time")
-    private LocalDateTime shippedOrArrivedTime;
+    @Column(name = "time_created")
+    private LocalDateTime timeCreated;
 
     @Column(name = "shipping_arrived",columnDefinition = "int default 0")
     private int shipmentStatus;

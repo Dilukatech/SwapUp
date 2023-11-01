@@ -23,8 +23,8 @@ public class InventoryManagerSwap {
     @Column(name = "swap_id")
     private Long swapId;
 
-    @Column(name = "swappingTime")
-    private LocalDateTime dateTime;
+    @Column(name = "time_created")
+    private LocalDateTime timeCreated;
 
     @Column(name = "swapping_status")
     private boolean swappingStatus;

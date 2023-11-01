@@ -11,7 +11,6 @@ import com.example.commercialsite.repository.HelpSupportRepo;
 import com.example.commercialsite.repository.ItemRepo;
 import com.example.commercialsite.repository.RequestTokenRepo;
 import com.example.commercialsite.repository.UsersRepo;
-import com.example.commercialsite.repository.UsersRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -162,7 +161,7 @@ public class CustomService {
                 itemDTO.setType(item.getType());
                 itemDTO.setActiveState(item.isAvailableStatus());
                 itemDTO.setPrice(item.getPrice());
-                itemDTO.setImageURL(item.getImageURL());
+                itemDTO.setImageURL(item.getImageUrl());
 
                 dataArray.add(itemDTO);
             }

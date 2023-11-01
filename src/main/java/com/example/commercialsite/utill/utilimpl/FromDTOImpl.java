@@ -1,17 +1,11 @@
 package com.example.commercialsite.utill.utilimpl;
 
 
-import com.example.commercialsite.dto.request.AcceptRequestDto;
-import com.example.commercialsite.dto.request.RequestTokenRequestDto;
-import com.example.commercialsite.dto.request.UserRegisterRequestDTO;
-import com.example.commercialsite.entity.Item;
-
-import com.example.commercialsite.dto.request.CheckHelpDto;
-import com.example.commercialsite.dto.request.HelpDto;
-import com.example.commercialsite.entity.HelpSupport;
-
-import com.example.commercialsite.entity.RequestToken;
-import com.example.commercialsite.entity.Users;
+import com.example.commercialsite.dto.request.*;
+import com.example.commercialsite.entity.*;
+import com.example.commercialsite.repository.InventoryManagerSwapRepo;
+import com.example.commercialsite.repository.ItemRepo;
+import com.example.commercialsite.repository.TokenRepo;
 import com.example.commercialsite.repository.UsersRepo;
 import com.example.commercialsite.utill.FromDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
@@ -32,6 +25,15 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
 
     @Autowired
     private UsersRepo usersRepo;
+
+    @Autowired
+    private ItemRepo itemRepo;
+
+    @Autowired
+    private TokenRepo tokenRepo;
+
+    @Autowired
+    private InventoryManagerSwapRepo inventoryManagerSwapRepo;
 
     @Override
     public Users getUsers(UserRegisterRequestDTO dto) {
@@ -72,7 +74,7 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
         Item item = new Item();
 
         item.setColor(acceptRequestDto.getColor());
-        item.setImageURL(acceptRequestDto.getImageURL());
+        item.setImageUrl(acceptRequestDto.getImageURL());
         item.setGender(acceptRequestDto.getGender());
         item.setType(acceptRequestDto.getType());
         item.setPrice(acceptRequestDto.getPrice());
@@ -103,6 +105,18 @@ class FromDTOImpl implements FromDTO { // from DTO to relevant entity object
 
         return helpSupport;
     }
+
+    public Swap getSwapRequest(SwapRequestDto swapRequestDto){
+        Swap swap = new Swap();
+        // injecting data
+        swap.setUsersId(usersRepo.getReferenceById(swapRequestDto.getCustomerId()));
+        swap.setItemId(itemRepo.getReferenceById(swapRequestDto.getItemId()));
+        swap.setTokenId(tokenRepo.getReferenceById(swapRequestDto.getTokenId()));
+        swap.setRequestDateTime(LocalDateTime.now());
+
+        return swap;
+    }
+
 
 
 }
