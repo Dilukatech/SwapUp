@@ -9,4 +9,6 @@ public interface InventoryManagerService{
     ResponseEntity<StandardResponse> shippedSwappingItem(Long inventoryManagerId, Long swapId, boolean status);
 
     ResponseEntity<StandardResponse> getAllUnprocessedSwapItems();
+
+    ResponseEntity<StandardResponse> getAllUnshippedSwapItems();
 }

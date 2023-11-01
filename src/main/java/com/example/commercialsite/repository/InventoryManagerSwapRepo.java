@@ -15,5 +15,8 @@ public interface InventoryManagerSwapRepo extends JpaRepository<InventoryManager
 
     InventoryManagerSwap getReferenceBySwapIdEquals(Long swapId);
 
+
+    List<InventoryManagerSwap> findAllBySwappingStatusEquals(boolean b);
+
     List<InventoryManagerSwap> getAllByCustomerIdEquals(long id);
 }

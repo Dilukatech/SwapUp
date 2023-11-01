@@ -1,13 +1,18 @@
 package com.example.commercialsite.service.serviceImpl;
 
+import com.example.commercialsite.dto.RequestTokenDto;
 import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
+import com.example.commercialsite.dto.response.InventoryManagerSwapDto;
 import com.example.commercialsite.entity.InventoryManagerSwap;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
+import com.example.commercialsite.entity.RequestToken;
 import com.example.commercialsite.repository.InventoryManagerSwapRepo;
 import com.example.commercialsite.repository.InventoryManagerTokenRequestRepo;
 import com.example.commercialsite.service.InventoryManagerService;
 import com.example.commercialsite.utill.StandardResponse;
 import com.example.commercialsite.utill.ToDTO;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +32,9 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
 
     @Autowired
     private ToDTO toDTO;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @Override
@@ -98,6 +106,24 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
         }else{
             return new ResponseEntity<>( //list are empty
                     new StandardResponse(400,"unprocessed inventory manager token request list is Empty.",null ),
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public ResponseEntity<StandardResponse> getAllUnshippedSwapItems() {
+        List<InventoryManagerSwap> inventoryManagerSwap = inventoryManagerSwapRepo.findAllBySwappingStatusEquals(false);
+
+        if(!inventoryManagerSwap.isEmpty()){ //list are not empty
+            List<InventoryManagerSwapDto> dtoList = modelMapper.map(inventoryManagerSwap, new TypeToken<List<InventoryManagerSwapDto>>() {
+            }.getType());//map to entity list to dto
+
+            return new ResponseEntity<>(
+                    new StandardResponse(200,"get all swapped item successfully.",dtoList ),
+                    HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>( //list are empty
+                    new StandardResponse(400,"swapped item list is Empty.",null ),
                     HttpStatus.BAD_REQUEST);
         }
     }

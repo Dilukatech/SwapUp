@@ -28,6 +28,20 @@ public class InventoryManager {
         }
     }
 
+    @GetMapping("/get-all-unShipped-swap-item")
+    public ResponseEntity<StandardResponse> GetAllUnshippedSwapItems(){
+        try {
+            return inventoryManagerService.getAllUnshippedSwapItems();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<StandardResponse>(
+                    new StandardResponse(500,"Error while processing get all unshipped swap item by inventory manager: " + e.getMessage(),null),
+                    HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }
+    }
+
     @PostMapping("/arrived_or_return_item")//arrived request item to the shop or shipped rejected item to customer
     public ResponseEntity<StandardResponse> arrivedOrReturnItem(@RequestParam("inventory-manager-id") Long inventoryManagerId,
                                                             @RequestParam("request-token-id") Long requestId,
