@@ -1,11 +1,12 @@
 package com.example.commercialsite.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.util.List;
-
+@JsonIgnoreProperties({"hibernateLazyInitializer"})// use for resolve serializer internal server error in request token shipping approval
 @AllArgsConstructor
 @NoArgsConstructor
 //@Data     // gives a circular reference error // moving toString annotation
