@@ -17,11 +17,11 @@ import java.time.LocalDateTime;
 public class InventoryManagerSwap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "inventory_manager_id")
-    private Long inventoryManagerId;
-
     @Column(name = "swap_id")
     private Long swapId;
+
+    @Column(name = "inventory_manager_id")
+    private Long inventoryManagerId;
 
     @Column(name = "time_created")
     private LocalDateTime timeCreated;

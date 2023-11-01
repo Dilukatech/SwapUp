@@ -155,8 +155,8 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public ResponseEntity<StandardResponse> requestSwap(SwapRequestDto swapRequestDto) {
         // existence of user
-        if (usersRepo.existsByEmailEquals(swapRequestDto.getEmail())) { // user exist
-            Users users = usersRepo.getReferenceById(swapRequestDto.getUserId()); // getting the user as an object
+        if (usersRepo.existsByUserIdEquals(swapRequestDto.getCustomerId())) { // user exist
+            Users users = usersRepo.getReferenceById(swapRequestDto.getCustomerId()); // getting the user as an object
 
             // is user active and verified
             if (    !users.isVerified() || // user is verified?
@@ -169,7 +169,6 @@ public class CustomerServiceImpl implements CustomerService {
             }
 
             // check subscription validity
-            //boolean subscriptionValidity = false;
             if( !paymentTableRepository.existsById(swapRequestDto.getCustomerId()) ){ // some sort of subscription  not available
                 return new ResponseEntity<>(
                         new StandardResponse(201, "subscription not available", null),
@@ -177,7 +176,7 @@ public class CustomerServiceImpl implements CustomerService {
                 );
             }
             //CustomerSubscription customerSubscription = customerSubscriptionRepo.getReferenceById(swapRequestDto.getCustomerId());
-            PaymentTable paymentTable = paymentTableRepository.getReferenceById(swapRequestDto.getUserId());
+            PaymentTable paymentTable = paymentTableRepository.getReferenceById(swapRequestDto.getCustomerId());
 
             // check customerSubscription state
             if( !paymentTable.isPayment() ){ // state is false

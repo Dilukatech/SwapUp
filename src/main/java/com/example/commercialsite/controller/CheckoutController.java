@@ -38,13 +38,12 @@ public class CheckoutController {
         paymentTable.setUserId(request.getUserId());
         paymentTable.setPrice(request.getPrice());
         paymentTable.setPlanName(request.getPlanName());
-        paymentTable.setPayment(false);
+        paymentTable.setPayment(true);
         paymentTable.setExpiredDate(null);
         LocalDateTime currentDateTime = LocalDateTime.now();
         paymentTable.setCreatedDate(currentDateTime);
 
         paymentTableRepository.save(paymentTable);
-
 
         Stripe.apiKey = stripeApiKey;
 
