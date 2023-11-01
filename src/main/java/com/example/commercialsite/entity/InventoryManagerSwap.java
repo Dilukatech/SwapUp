@@ -29,4 +29,7 @@ public class InventoryManagerSwap {
     @Column(name = "swapping_status")
     private boolean swappingStatus;
 
+    @Column(name = "customer_id")
+    private Long customerId;
+
 }

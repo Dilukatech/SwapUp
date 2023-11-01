@@ -20,4 +20,6 @@ public interface CustomerService {
     ResponseEntity<StandardResponse> requestSwap(SwapRequestDto swapRequestDto);
 
     ResponseEntity<StandardResponse> getValidTokens(long id);
+
+    ResponseEntity<StandardResponse> getSwapStatus(long id);
 }

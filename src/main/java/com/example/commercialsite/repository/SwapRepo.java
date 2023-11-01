@@ -9,4 +9,5 @@ import org.springframework.stereotype.Repository;
 @EnableJpaRepositories
 public interface SwapRepo extends JpaRepository<Swap, Long> {
 
+
 }

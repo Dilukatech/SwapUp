@@ -142,5 +142,24 @@ public class CustomerController {
         return result;
     }
 
+    @PostMapping("/get-shipped-swaps")
+    public ResponseEntity<StandardResponse> getSwapStatus(@RequestBody long id) {
+        logger.info("Logging begins... getShippedSwaps");   // log INFO-level message
+        ResponseEntity<StandardResponse> result;
+
+        try {
+            result = customerService.getSwapStatus(id);
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, ex.getMessage(), ex);
+            return new ResponseEntity<>(
+                    new StandardResponse(500,"internal server error in requestSwap from customer",null),
+                    HttpStatus.INTERNAL_SERVER_ERROR
+            );
+        }
+
+        logger.info("Done... getShippedSwaps");
+        return result;
+    }
+
 
 }
