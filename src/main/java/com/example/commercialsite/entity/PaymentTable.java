@@ -20,7 +20,6 @@ public class PaymentTable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String planName;
     private LocalDateTime createdDate;
     private LocalDateTime expiredDate;

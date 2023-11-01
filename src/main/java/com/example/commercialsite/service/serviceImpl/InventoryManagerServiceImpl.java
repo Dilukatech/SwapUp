@@ -1,14 +1,11 @@
 package com.example.commercialsite.service.serviceImpl;
 
-import com.example.commercialsite.dto.response.HelpRequestDto;
 import com.example.commercialsite.dto.response.Inv_Mng_TokenRequestDto;
-import com.example.commercialsite.entity.HelpSupport;
 import com.example.commercialsite.entity.InventoryManagerSwap;
 import com.example.commercialsite.entity.InventoryManagerTokenRequest;
 import com.example.commercialsite.repository.InventoryManagerSwapRepo;
 import com.example.commercialsite.repository.InventoryManagerTokenRequestRepo;
 import com.example.commercialsite.service.InventoryManagerService;
-import com.example.commercialsite.utill.FromDTO;
 import com.example.commercialsite.utill.StandardResponse;
 import com.example.commercialsite.utill.ToDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +44,7 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
                         HttpStatus.CREATED);
             }else {
                 inv_mng_tokenRequest.setInventoryManagerId(inventoryManagerId);
-                inv_mng_tokenRequest.setShippedOrArrivedTime(LocalDateTime.now());
+                inv_mng_tokenRequest.setTimeCreated(LocalDateTime.now());
                 inv_mng_tokenRequest.setShipmentStatus(shippingStatus);//set the status arrived or return
                 inv_managerTokenRequestRepo.save(inv_mng_tokenRequest);
 
@@ -71,7 +68,7 @@ public class InventoryManagerServiceImpl implements InventoryManagerService {
             InventoryManagerSwap inventoryManagerSwap = inventoryManagerSwapRepo.getReferenceBySwapIdEquals(swapId);
 
             inventoryManagerSwap.setInventoryManagerId(inventoryManagerId);
-            inventoryManagerSwap.setDateTime(LocalDateTime.now());
+            inventoryManagerSwap.setTimeCreated(LocalDateTime.now());
             inventoryManagerSwap.setSwappingStatus(status);//set the status shipped (1->shipped)
             inventoryManagerSwapRepo.save(inventoryManagerSwap);
 
